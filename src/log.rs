@@ -35,7 +35,7 @@ static LOGGER: spin::Mutex<Option<Logger>> = spin::Mutex::new(None);
 pub fn init() {
     //Steal the peri
     let p = unsafe { pac::Peripherals::steal() };
-    let mut logger = Logger(Uart0::new_with_config(
+    let logger = Logger(Uart0::new_with_config(
         p.uart0,
         uart::TIMEOUT_US,
         uart::Config {

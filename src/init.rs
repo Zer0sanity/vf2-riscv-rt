@@ -1,18 +1,10 @@
-//! Clock and peripheral initialization for device bring-up.
-//!
-//!
-//! Implementations derived from [`oreboot`](https://github.com/oreboot/oreboot/blob/main/src/mainboard/starfive/visionfive2/bt0/src/init.rs).
-
-use core::mem;
-
 use embedded_hal::delay::DelayNs;
 use jh71xx_hal::{clocks, ddr, delay, pac, pll, register::feature_disable};
 use riscv::register::{marchid, mhartid, mimpid, mstatus, mvendorid};
 
-//use crate::println;
+use crate::println;
 
-pub const DT_MAGIC: u32 = u32::from_le_bytes([0xd0, 0x0d, 0xfe, 0xed]);
-pub const SRAM_LEN: usize = 0x20_000;
+//use crate::println;
 
 //#[no_mangle]
 //#[allow(non_snake_case)]
@@ -129,19 +121,20 @@ pub unsafe fn setup_ddr() {
 }
 
 /// Prints the boot mode of the device.
-pub fn print_boot_mode(pinctrl: &pac::AonPinctrl) {
+pub fn print_boot_mode() {
+    let p = unsafe { pac::AonPinctrl::steal() };
     // lowest two bits only; 0: SPI, 1: MMC2, 2: MMC1, 3: UART
-    let mode_str = match pinctrl.ioirq_status_in_sync2().read().ioirq().bits() & 0b11 {
+    let mode_str = match p.ioirq_status_in_sync2().read().ioirq().bits() & 0b11 {
         0 => "SPI",
         1 => "MMC2",
         2 => "MMC1",
         3 => "UART",
         mode => {
-            //            println!("boot mode: unknown ({mode:#010x})");
+            println!("boot mode: unknown ({mode:#010x})");
             "unknown"
         }
     };
-    //    println!("boot mode: {mode_str}");
+    println!("boot mode: {mode_str}");
 }
 
 /// Gets the vendor name of the device from the `vendorid`.
@@ -179,85 +172,11 @@ pub fn print_ids() {
     // TODO: This prints 8000000000000007, but should be 80000007.
     // See U74-MC core complex manual 21G3.
     let archid = (aid >> 32) as u32 | aid as u32;
-    //    println!("RISC-V arch {archid:#010x}");
+    println!("RISC-V arch {archid:#010x}");
     let vendor_name = vendorid_to_name(vid);
-    //    println!("RISC-V core vendor: {vendor_name} ({vid:#06x})");
+    println!("RISC-V core vendor: {vendor_name} ({vid:#06x})");
     let imp_name = impid_to_name(iid);
-    //    println!("RISC-V implementation: {imp_name} ({iid:#010x})");
+    println!("RISC-V implementation: {imp_name} ({iid:#010x})");
     let hart_id = mhartid::read();
-    //    println!("RISC-V hart ID {hart_id}");
-}
-
-/// Searches a byte buffer for the start of a flattened device tree blob.
-/*#[inline]
-pub fn find_fdt<'a>(sram: &pac::Sram, dtb: &'a mut [u8]) -> Result<fdt::Fdt<'a>, fdt::Error> {
-    let word_len = mem::size_of::<u32>();
-    let dtb_words = dtb.len() / word_len;
-    // SPL-like header is 1024 KiB (256 32-bit words)
-    let hdr_words = 256;
-
-    match sram
-        .word_iter()
-        .skip(hdr_words)
-        .position(|w| w.read().bits() == DT_MAGIC)
-    {
-        Some(pos) => {
-            let iter = sram.word_iter().skip(hdr_words + pos).take(dtb_words);
-
-            dtb.chunks_exact_mut(word_len)
-                .zip(iter)
-                .for_each(|(dst, src)| {
-                    dst.copy_from_slice(src.read().bits().to_le_bytes().as_ref());
-                });
-
-            fdt::Fdt::new(dtb)
-        }
-        None => Err(fdt::Error::BadMagic),
-    }
-}
-
-/// Prints the board DTB loaded from SRAM.
-#[inline]
-pub fn print_board_fdt(fdt: &fdt::Fdt) {
-    println!(
-        "Found DTB for model: {}",
-        fdt.root().map(|r| r.model()).unwrap_or_default()
-    );
-
-    const TAB: &str = "    ";
-
-    match fdt.find_node("/memory") {
-        Some(mem) => match mem.property("reg-names").map(|p| p.iter_str()) {
-            Some(reg_names) => {
-                mem.reg().zip(reg_names).for_each(|(reg, name)| {
-                    let address = reg.starting_address as usize;
-                    let size = reg.size.unwrap_or(0);
-
-                    println!("{TAB}{name} region - address: {address:#010x}, size: {size:#010x}");
-                });
-            }
-            _ => {
-                println!("Invalid DTB /memory properties");
-            }
-        },
-        None => {
-            println!("Missing DTB /memory node");
-        }
-    }
-}
-*/
-/// Basic panic handler that prints out panic info over UART.
-pub fn print_panic(info: &core::panic::PanicInfo) -> ! {
-    match info.location().map(|l| (l.file(), l.line())) {
-        Some((file, line)) => {
-            //            println!(r#"panic in "{file}" line {line}"#);
-        }
-        None => {
-            //            println!("panic at unknown location");
-        }
-    }
-
-    loop {
-        core::hint::spin_loop();
-    }
+    println!("RISC-V hart ID {hart_id}");
 }

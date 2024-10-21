@@ -11,58 +11,104 @@ use riscv_rt::{entry, pre_init};
 
 #[export_name = "_mp_hook"]
 pub extern "Rust" fn mp_hook(hartid: usize) -> bool {
+    //If hart is 1 return true, otherwise spin.
+    //TODO: if later on we want to bring another hart online we will have to
+    //modify loop to break out.
     match hartid {
         1 => true,
-        _ => false,
+        _ => {
+            loop {
+                riscv::asm::wfi();
+                if riscv::register::mip::read().msoft() {
+                    break;
+                }
+            }
+            false
+        }
     }
-
-    // if hartid == 1 {
-    //     true
-    // } else {
-    //     false
-    // }
-    // hartid == 1
 }
 
-#[no_mangle]
-fn MachineEnvCall(trap_frame: &riscv_rt::TrapFrame) -> ! {
+#[export_name = "ExceptionHandler"]
+fn custom_exception_handler(trap_frame: &riscv_rt::TrapFrame) -> ! {
+    println!("exception {:?}", trap_frame);
     loop {}
 }
 
-#[no_mangle]
-fn ExceptionHandler(trap_frame: &riscv_rt::TrapFrame) -> ! {
+#[export_name = "DefaultHandler"]
+fn custom_default_handler() {
+    println!("custom_default_handler()");
     loop {}
-}
-
-#[no_mangle]
-fn DefaultHandler() {
-    // ...
 }
 
 #[pre_init]
 unsafe fn before_main() {
-    init::setup_mstatus();
-    init::setup_features();
+    //    //Setup global things
     init::setup_clocks();
     init::setup_gpio();
-    init::setup_ddr();
-    //let dp = pac::Peripherals::take().unwrap();
+    //init::setup_ddr();
+}
 
-    //let (sys_syscon, mut clock_syscrg, _clock_aoncrg) =
-    //    init::configure_clocks(dp.sys_syscon, dp.syscrg, dp.aoncrg);
-    //let (sys_syscon, _sys_pinctrl) = init::configure_gpios(sys_syscon, dp.sys_pinctrl);
+#[repr(usize)]
+#[derive(Debug)]
+pub enum Harts {
+    Hart0,
+    Hart1,
+    Hart2,
+    Hart3,
+    Hart4,
+    Unknown,
+}
 
-    // AXI cfg0, clk_apb_bus, clk_apb0, clk_apb12
-    //clock_syscrg.reset_apb0();
-
-    //let _ddr = init::configure_dram(dp.dmc_ctrl, dp.dmc_phy, clock_syscrg.release(), sys_syscon);
+impl From<usize> for Harts {
+    fn from(value: usize) -> Self {
+        match value {
+            0 => Harts::Hart0,
+            1 => Harts::Hart1,
+            2 => Harts::Hart2,
+            3 => Harts::Hart3,
+            4 => Harts::Hart4,
+            _ => Harts::Unknown,
+        }
+    }
 }
 
 #[entry]
 fn main() -> ! {
     log::init();
-    println!("main");
-    blinky::configure();
+
+    let hart_id = Harts::from(riscv::register::mhartid::read());
+    match hart_id {
+        Harts::Hart0 => init::print_ids(),
+        Harts::Hart1 => {
+            init::print_boot_mode();
+            init::print_ids();
+            unsafe {
+                init::setup_ddr();
+            }
+        }
+        Harts::Hart2 => init::print_ids(),
+        Harts::Hart3 => init::print_ids(),
+        Harts::Hart4 => init::print_ids(),
+        _ => {
+            println!("fml");
+
+            //println!("Unknown hart {:?} booted.", hart_id);
+        }
+    }
+
+    //Setup core local things
+    unsafe {
+        init::setup_mstatus();
+        init::setup_features();
+    };
+
+    match hart_id {
+        Harts::Hart1 => {
+            blinky::configure();
+            println!("back in main about to spin after setting up blinky");
+        }
+        _ => {}
+    }
 
     loop {}
 }
