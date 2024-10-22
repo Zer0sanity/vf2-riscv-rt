@@ -4,6 +4,7 @@
 extern crate panic_halt;
 
 mod blinky;
+mod blinky_pwm;
 mod init;
 mod log;
 
@@ -105,6 +106,7 @@ fn main() -> ! {
     match hart_id {
         Harts::Hart1 => {
             blinky::configure();
+            blinky_pwm::configure();
             println!("back in main about to spin after setting up blinky");
         }
         _ => {}

@@ -1,6 +1,6 @@
 use core::fmt;
 use embedded_hal_nb::serial::{ErrorType, Read, Write};
-use jh71xx_hal::{pac, uart};
+use jh7110_hal::{pac, uart};
 use nb::block;
 
 /// Convenience alias for the [`Uart`](jh71xx_hal::uart::Uart) implementation for the [`Uart0`](jh71xx_hal::pac::Uart0) peripheral.

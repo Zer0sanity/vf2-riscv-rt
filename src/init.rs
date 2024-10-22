@@ -1,5 +1,5 @@
 use embedded_hal::delay::DelayNs;
-use jh71xx_hal::{clocks, ddr, delay, pac, pll, register::feature_disable};
+use jh7110_hal::{clocks, ddr, delay, pac, pll, register::feature_disable};
 use riscv::register::{marchid, mhartid, mimpid, mstatus, mvendorid};
 
 use crate::println;
