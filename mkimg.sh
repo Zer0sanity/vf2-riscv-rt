@@ -10,7 +10,7 @@ elfpath=target/$target/$build/$elf
 
 #Dump the object file
 objdmppath=$elf.objdmp
-riscv64-unknown-elf-objdump -CdhS $elfpath > $objdmppath
+riscv64-unknown-elf-objdump -tCDhS $elfpath > $objdmppath
 
 #Convert elf to binary
 binpath=$elfpath.bin

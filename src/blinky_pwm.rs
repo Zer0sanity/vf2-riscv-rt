@@ -1,6 +1,8 @@
 use hal::gpio::{GpenFunction, GpoFunction};
 use jh7110_hal as hal;
-use jh7110_pac as pac;
+use jh7110_pac::{self as pac};
+
+use crate::println;
 
 pub fn configure() {
     let p = unsafe { pac::Peripherals::steal() };
@@ -64,4 +66,12 @@ pub fn configure() {
             .pos()
             .clear_bit() //disable active pull down capability
     });
+}
+
+pac::interrupt!(UART0, uart0);
+#[no_mangle]
+fn uart0() {
+    // UART0 interrupt handler is running in an interrupt-free context,
+    // and should thus have exclusive access to peripheral memory.
+    println!("HI");
 }

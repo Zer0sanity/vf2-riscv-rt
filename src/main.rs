@@ -3,10 +3,11 @@
 
 extern crate panic_halt;
 
-mod blinky;
-mod blinky_pwm;
 mod init;
 mod log;
+mod blinky;
+mod blinky_pwm;
+mod default_isr_this_has_to_be_wrong;
 
 use riscv_rt::{entry, pre_init};
 
@@ -65,7 +66,7 @@ impl From<usize> for Harts {
         match value {
             0 => Harts::Hart0,
             1 => Harts::Hart1,
-            2 => Harts::Hart2,
+           2 => Harts::Hart2,
             3 => Harts::Hart3,
             4 => Harts::Hart4,
             _ => Harts::Unknown,

@@ -18,8 +18,8 @@ embedded-hal = "1.0.0"
 embedded-hal-nb = "1.0.0"
 embedded-io = "0.6.1"
 heapless = "0.7.17"
-jh7110-pac = { path = "../jh7110-pac/", features = ["rt"]}
+jh7110-pac = { path = "../jh7110-pac/"}
 nb = "1.1.0"
-jh7110-hal = { path = "../jh7110-hal/" }
+jh7110-hal = { path = "../jh7110-hal/", features = ["rt", "8G"] }
 critical-section = "1.1.3"
 spin = "0.9.8"
