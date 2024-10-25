@@ -1,6 +1,7 @@
 use crate::println;
 use jh7110_pac as pac;
-use riscv::interrupt::machine::Interrupt;
+use riscv::{interrupt::machine::Interrupt, register::mhartid};
+//use riscv_rt::interrupts;
 
 #[riscv_rt::core_interrupt(Interrupt::MachineExternal)]
 fn machine_external_isr() {
@@ -9,22 +10,90 @@ fn machine_external_isr() {
     //when multipal cores are running.  Not sure if I need to accunt for interrupt
     //priorities or not
     let plic = unsafe { pac::Plic::steal() };
-
+    //Claim the interrupt
     let interrupt_number = plic.threshold_claim(hart).claim_complete().read().bits();
-
+    println!("Global interrupt number: {}", interrupt_number);
     if interrupt_number != 0 {
+        //Load irs entry from the table
         let v: &pac::Vector = &pac::__EXTERNAL_INTERRUPTS[interrupt_number as usize];
         unsafe {
+            //Check if its set and execute handler
             if v._reserved != 0 {
                 (v._handler)();
             } else {
                 println!("reserved interrupt hit. wait what?");
             }
         }
+        //Complete the interrupt
         plic.threshold_claim(hart)
             .claim_complete()
-            .write(|w| w.complete().variant(interrupt_number))
+            .write(|w| w.complete().variant(interrupt_number));
     }
+}
+
+#[repr(u8)]
+pub enum InterruptPriority {
+    Disabled = 0,
+    Priority1 = 1,
+    Priority2 = 2,
+    Priority3 = 3,
+    Priority4 = 4,
+    Priority5 = 5,
+    Priority6 = 6,
+    Priority7 = 7,
+}
+
+impl From<u32> for InterruptPriority {
+    fn from(value: u32) -> Self {
+        match value {
+            0 => InterruptPriority::Disabled,
+            1 => InterruptPriority::Priority1,
+            2 => InterruptPriority::Priority2,
+            3 => InterruptPriority::Priority3,
+            4 => InterruptPriority::Priority4,
+            5 => InterruptPriority::Priority5,
+            6 => InterruptPriority::Priority6,
+            7 => InterruptPriority::Priority7,
+            _ => InterruptPriority::Disabled,
+        }
+    }
+}
+
+pub fn enable_interrupt(interrupt_number: pac::Interrupt, priority: InterruptPriority) {
+    let plic = unsafe { pac::Plic::steal() };
+    let interrupt_number = interrupt_number as usize;
+    let priority = priority as u32;
+    //Set the interrupt prority
+    println!(
+        "Setting priority for interrupt {} to {}",
+        interrupt_number, priority
+    );
+    plic.priority(interrupt_number)
+        .write(|w| w.priority().variant(priority));
+
+    //NOTE:  Pending bit can be cleared by enabeling the interrupt and then claiming it
+
+    //Enable the interrupt
+    let hart = mhartid::read();
+    let register_offset = interrupt_number / 32;
+    let enable_mask = 1 << (interrupt_number % 32);
+    println!(
+        "Enabeling interrupt {}, register {}, mask {:#10x}",
+        interrupt_number, register_offset, enable_mask
+    );
+    plic.enable(hart)
+        .enable_bits(register_offset)
+        .modify(|r, w| w.enable().variant(r.enable().bits() | enable_mask));
+
+    //Set the prority threshold (for now just or it with the prority value so at least
+    //this one will fire)
+    println!(
+        "Setting interrupt threshold for hart {} to {}",
+        hart, priority
+    );
+    plic.threshold_claim(hart)
+        .threshold()
+        .modify(|r, w| w.threshold().variant(r.threshold().bits() | priority));
 }
 
 #[no_mangle]
@@ -44,7 +113,7 @@ pac::interrupt!(QSPI0, default_handler);
 pac::interrupt!(CRYPTO, default_handler);
 pac::interrupt!(SDMA, default_handler);
 pac::interrupt!(TRNG, default_handler);
-//pac::interrupt!(UART0, uart0);  // Assuming you want a specific handler for UART0
+pac::interrupt!(UART0, default_handler); // Assuming you want a specific handler for UART0
 pac::interrupt!(UART1, default_handler);
 pac::interrupt!(UART2, default_handler);
 pac::interrupt!(I2C0, default_handler);
@@ -64,7 +133,7 @@ pac::interrupt!(SPI3, default_handler);
 pac::interrupt!(SPI4, default_handler);
 pac::interrupt!(SPI5, default_handler);
 pac::interrupt!(SPI6, default_handler);
-pac::interrupt!(PTC0, default_handler);
+//pac::interrupt!(PTC0, default_handler);
 pac::interrupt!(PTC1, default_handler);
 pac::interrupt!(PTC2, default_handler);
 pac::interrupt!(PTC3, default_handler);

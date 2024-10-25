@@ -180,3 +180,10 @@ pub fn print_ids() {
     let hart_id = mhartid::read();
     println!("RISC-V hart ID {hart_id}");
 }
+
+pub fn print_uart_isr_reg() {
+    let u = unsafe { pac::Uart0::steal() };
+    let r = u.ier().read().bits();
+
+    println!("UART0 ier: {:#10x}", r);
+}

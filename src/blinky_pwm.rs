@@ -1,7 +1,8 @@
 use hal::gpio::{GpenFunction, GpoFunction};
 use jh7110_hal as hal;
-use jh7110_pac::{self as pac};
+use jh7110_pac::{self as pac, Interrupt};
 
+use crate::default_isr_this_has_to_be_wrong::{enable_interrupt, InterruptPriority};
 use crate::println;
 
 pub fn configure() {
@@ -31,7 +32,7 @@ pub fn configure() {
             .single()
             .clear_bit() //disable one shot.  when set counter will stop after LRC is hit
             .inte()
-            .clear_bit() //disable interrupts for now
+            .set_bit() //enable interrupts
             .int()
             .clear_bit() //clear the interrupt pending bit
             .cntrrst()
@@ -66,11 +67,13 @@ pub fn configure() {
             .pos()
             .clear_bit() //disable active pull down capability
     });
+
+    enable_interrupt(Interrupt::PTC0, InterruptPriority::Priority7)
 }
 
-pac::interrupt!(UART0, uart0);
+pac::interrupt!(PTC0, ptc0);
 #[no_mangle]
-fn uart0() {
+fn ptc0() {
     // UART0 interrupt handler is running in an interrupt-free context,
     // and should thus have exclusive access to peripheral memory.
     println!("HI");

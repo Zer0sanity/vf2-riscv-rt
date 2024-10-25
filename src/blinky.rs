@@ -18,8 +18,6 @@ pub fn configure() {
         let mtime = 0x0200_bff8 as *const u64;
         //quarter second .25s/(1/4MHz) = 1000000
         mtimecmp.write_volatile(mtime.read_volatile() + 1_000_000);
-        riscv::register::mie::set_mtimer();
-        riscv::register::mstatus::set_mie();
         gpio40_out.set_low().ok();
         PIN_IS_HIGH = false;
     }
@@ -55,16 +53,16 @@ fn machine_timer_isr() {
         mtimecmp.write_volatile(mtime.read_volatile() + 1_000_000);
     }
 
-    if peripherals.pwm.ctrl().read().en().bit_is_set() {
-        unsafe {
-            DUTY_CYCLE = (DUTY_CYCLE + 5000) % PERIOD;
-            peripherals
-                .pwm
-                .hrc()
-                .modify(|_, w| w.hrc().variant(DUTY_CYCLE));
-            println!("Duty Cycle: {DUTY_CYCLE}");
-        }
-    } else {
-        println!("PWM Disabled :(");
-    }
+    //if peripherals.pwm.ctrl().read().en().bit_is_set() {
+    //    unsafe {
+    //        DUTY_CYCLE = (DUTY_CYCLE + 5000) % PERIOD;
+    //        peripherals
+    //            .pwm
+    //            .hrc()
+    //            .modify(|_, w| w.hrc().variant(DUTY_CYCLE));
+    //        println!("Duty Cycle: {DUTY_CYCLE}");
+    //    }
+    //} else {
+    //    println!("PWM Disabled :(");
+    //}
 }

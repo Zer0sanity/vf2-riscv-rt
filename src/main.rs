@@ -3,11 +3,11 @@
 
 extern crate panic_halt;
 
-mod init;
-mod log;
 mod blinky;
 mod blinky_pwm;
 mod default_isr_this_has_to_be_wrong;
+mod init;
+mod log;
 
 use riscv_rt::{entry, pre_init};
 
@@ -66,7 +66,7 @@ impl From<usize> for Harts {
         match value {
             0 => Harts::Hart0,
             1 => Harts::Hart1,
-           2 => Harts::Hart2,
+            2 => Harts::Hart2,
             3 => Harts::Hart3,
             4 => Harts::Hart4,
             _ => Harts::Unknown,
@@ -109,6 +109,15 @@ fn main() -> ! {
             blinky::configure();
             blinky_pwm::configure();
             println!("back in main about to spin after setting up blinky");
+            init::print_uart_isr_reg();
+            unsafe {
+                println!("Enabeling machine timer interrupt");
+                riscv::register::mie::set_mtimer();
+                println!("Enabeling machine external interrupt");
+                riscv::register::mie::set_mext();
+                println!("Enabeling interrupts");
+                riscv::register::mstatus::set_mie();
+            }
         }
         _ => {}
     }
