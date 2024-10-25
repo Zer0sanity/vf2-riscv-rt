@@ -1,5 +1,5 @@
 use crate::println;
-use jh7110_pac as pac;
+use jh7110_pac::{self as pac};
 use riscv::{interrupt::machine::Interrupt, register::mhartid};
 //use riscv_rt::interrupts;
 
@@ -94,6 +94,63 @@ pub fn enable_interrupt(interrupt_number: pac::Interrupt, priority: InterruptPri
     plic.threshold_claim(hart)
         .threshold()
         .modify(|r, w| w.threshold().variant(r.threshold().bits() | priority));
+}
+
+pub fn clear_interrupt_enable_all() {
+    let plic = unsafe { pac::Plic::steal() };
+    while let Some(hart_enable_regs) = plic.enable_iter().next() {
+        while let Some(hart_enable_reg) = hart_enable_regs.enable_bits_iter().next() {
+            hart_enable_reg.reset();
+            println!(
+                "Cleared Interrupt Enable: {}",
+                hart_enable_reg.read().bits()
+            );
+        }
+    }
+}
+
+pub fn clear_interrupt_priotiry_all() {
+    let plic = unsafe { pac::Plic::steal() };
+    while let Some(priority_reg) = plic.priority_iter().next() {
+        priority_reg.reset();
+        println!("Reset Interrupt Priority {}", priority_reg.read().bits());
+    }
+}
+pub fn print_interrupt_enable() {
+    let plic = unsafe { pac::Plic::steal() };
+    let mut hart = 0;
+    while let Some(hart_enable_regs) = plic.enable_iter().next() {
+        let mut reg_number = 0;
+        while let Some(hart_enable_reg) = hart_enable_regs.enable_bits_iter().next() {
+            println!(
+                "Hart: {}, RegNum: {}, Value: {}",
+                hart,
+                reg_number,
+                hart_enable_reg.read().bits()
+            );
+            reg_number += 1;
+        }
+        hart += 1;
+    }
+}
+
+pub fn print_priority_interrupt_info() {
+    let plic = unsafe { pac::Plic::steal() };
+    let mut reg_num = 0;
+    println!("Intrrupt Priority");
+    while let Some(priority_reg) = plic.priority_iter().next() {
+        println!("RegNum: {}, Value: {}", reg_num, priority_reg.read().bits());
+        reg_num += 1;
+    }
+}
+
+pub fn print_pending_interrupt_info() {
+    let plic = unsafe { pac::Plic::steal() };
+    let mut reg_num = 0;
+    while let Some(pending_reg) = plic.pending_iter().next() {
+        println!("RegNum: {}, Value: {}", reg_num, pending_reg.read().bits());
+        reg_num += 1;
+    }
 }
 
 #[no_mangle]
