@@ -1,4 +1,5 @@
 #!/bin/bash
+#cargo build
 cargo build --release
 
 target=riscv64gc-unknown-none-elf
@@ -10,7 +11,7 @@ elfpath=target/$target/$build/$elf
 
 #Dump the object file
 objdmppath=$elf.objdmp
-riscv64-unknown-elf-objdump -tCDhS $elfpatH > $OBJDMPPATH
+riscv64-unknown-elf-objdump -tCDhS $elfpath > $objdmppath
 
 #Convert elf to binary
 binpath=$elfpath.bin

@@ -17,8 +17,8 @@ pub fn configure() {
         .rst3()
         .modify(|_, w| w.u0_pwm_apb().none());
     //Set the low and high counter values
-    p.pwm.lrc().modify(|_, w| w.lrc().variant(20000));
-    p.pwm.hrc().modify(|_, w| w.hrc().variant(5000));
+    p.pwm.lrc().modify(|_, w| w.lrc().variant(10_000_000u32));
+    p.pwm.hrc().modify(|_, w| w.hrc().variant(10_000_000u32));
     //Setup the control register
     p.pwm.ctrl().modify(|_, w| {
         w.en()
@@ -74,7 +74,17 @@ pub fn configure() {
 pac::interrupt!(PTC0, ptc0);
 #[no_mangle]
 fn ptc0() {
-    // UART0 interrupt handler is running in an interrupt-free context,
-    // and should thus have exclusive access to peripheral memory.
-    println!("HI");
+    let p = unsafe { pac::Peripherals::steal() };
+
+    //Set the low and high counter values
+    let mut current_hrc = p.pwm.hrc().read().bits();
+    if current_hrc == 0 {
+        current_hrc = 10_000_000u32;
+    } else {
+        current_hrc -= 1;
+    }
+    p.pwm.hrc().modify(|_, w| w.hrc().variant(current_hrc));
+
+    //    let current_time = p.pwm.cntr().read().bits();
+    //    println!("Current Time: {current_time}");
 }

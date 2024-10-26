@@ -1,4 +1,4 @@
-use crate::println;
+use crate::{default_isr_this_has_to_be_wrong, println};
 use embedded_hal::digital::OutputPin;
 use jh7110_hal::gpio;
 use jh7110_pac as pac;
@@ -51,6 +51,8 @@ fn machine_timer_isr() {
         let mtimecmp = 0x0200_4008 as *mut u64;
         let mtime = 0x0200_bff8 as *const u64;
         mtimecmp.write_volatile(mtime.read_volatile() + 1_000_000);
+
+        //default_isr_this_has_to_be_wrong::print_pending_interrupt_info();
     }
 
     //if peripherals.pwm.ctrl().read().en().bit_is_set() {

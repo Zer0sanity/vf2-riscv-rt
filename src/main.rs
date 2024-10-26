@@ -106,10 +106,15 @@ fn main() -> ! {
 
     match hart_id {
         Harts::Hart1 => {
+            default_isr_this_has_to_be_wrong::clear_interrupt_enable_all();
+            default_isr_this_has_to_be_wrong::clear_interrupt_priotiry_all();
             blinky::configure();
             blinky_pwm::configure();
             println!("back in main about to spin after setting up blinky");
             init::print_uart_isr_reg();
+            default_isr_this_has_to_be_wrong::print_interrupt_enable();
+            default_isr_this_has_to_be_wrong::print_pending_interrupt_info();
+            default_isr_this_has_to_be_wrong::print_priority_interrupt_info();
             unsafe {
                 println!("Enabeling machine timer interrupt");
                 riscv::register::mie::set_mtimer();
