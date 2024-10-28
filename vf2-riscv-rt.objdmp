@@ -119,25 +119,25 @@ SYMBOL TABLE:
 00000000080004d6 l     F .text	0000000000000014 .hidden <&T as core::fmt::Display>::fmt
 00000000080074a8 l     O .bss	0000000000000001 .hidden vf2_riscv_rt::blinky::PIN_IS_HIGH
 0000000008000512 l     F .text	000000000000080e .hidden vf2_riscv_rt::default_isr_this_has_to_be_wrong::print_interrupt_enable
-0000000008005140 l     O .rodata	0000000000000010 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482
+0000000008005140 l     O .rodata	0000000000000010 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394
 0000000008000d20 l     F .text	0000000000000126 .hidden vf2_riscv_rt::default_isr_this_has_to_be_wrong::print_priority_interrupt_info
-0000000008005288 l     O .rodata	0000000000000020 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.37.llvm.15509408438570070482
+0000000008005288 l     O .rodata	0000000000000020 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.37.llvm.15149315670060530394
 0000000008000e46 l     F .text	000000000000013a .hidden vf2_riscv_rt::default_isr_this_has_to_be_wrong::print_pending_interrupt_info
-00000000080052b8 l     O .rodata	0000000000000020 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.39.llvm.15509408438570070482
+00000000080052b8 l     O .rodata	0000000000000020 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.39.llvm.15149315670060530394
 0000000008000f80 l     F .text	0000000000000120 .hidden vf2_riscv_rt::init::print_boot_mode
-0000000008005308 l     O .rodata	0000000000000003 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.42.llvm.15509408438570070482
-000000000800531b l     O .rodata	0000000000000004 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.44.llvm.15509408438570070482
-000000000800530f l     O .rodata	0000000000000004 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.43.llvm.15509408438570070482
-0000000008005313 l     O .rodata	0000000000000004 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15509408438570070482
-0000000008005330 l     O .rodata	0000000000000010 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.47.llvm.15509408438570070482
+0000000008005308 l     O .rodata	0000000000000003 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.42.llvm.15149315670060530394
+000000000800531b l     O .rodata	0000000000000004 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.44.llvm.15149315670060530394
+000000000800530f l     O .rodata	0000000000000004 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.43.llvm.15149315670060530394
+0000000008005313 l     O .rodata	0000000000000004 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15149315670060530394
+0000000008005330 l     O .rodata	0000000000000010 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.47.llvm.15149315670060530394
 00000000080010a0 l     F .text	0000000000000100 .hidden vf2_riscv_rt::init::print_uart_isr_reg
-0000000008005350 l     O .rodata	0000000000000010 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.49.llvm.15509408438570070482
-0000000008005138 l     O .rodata	0000000000000002 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.22.llvm.15509408438570070482
-0000000008005270 l     O .rodata	000000000000000b .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.35.llvm.15509408438570070482
-000000000800527b l     O .rodata	000000000000000c .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.36.llvm.15509408438570070482
-00000000080052a8 l     O .rodata	000000000000000b .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.38.llvm.15509408438570070482
-000000000800531f l     O .rodata	000000000000000b .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.46.llvm.15509408438570070482
-0000000008005340 l     O .rodata	000000000000000b .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.48.llvm.15509408438570070482
+0000000008005350 l     O .rodata	0000000000000010 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.49.llvm.15149315670060530394
+0000000008005138 l     O .rodata	0000000000000002 .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.22.llvm.15149315670060530394
+0000000008005270 l     O .rodata	000000000000000b .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.35.llvm.15149315670060530394
+000000000800527b l     O .rodata	000000000000000c .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.36.llvm.15149315670060530394
+00000000080052a8 l     O .rodata	000000000000000b .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.38.llvm.15149315670060530394
+000000000800531f l     O .rodata	000000000000000b .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.46.llvm.15149315670060530394
+0000000008005340 l     O .rodata	000000000000000b .hidden anon.dcf6fa3edbf04ae31d3b20daf87a78f1.48.llvm.15149315670060530394
 0000000000000000 l    df *ABS*	0000000000000000 vf2_riscv_rt.83d5470a0e8552aa-cgu.2
 000000000800151c l       .text	0000000000000000 $x.0
 000000000800160a l       .text	0000000000000000 $x.1
@@ -184,7 +184,7 @@ SYMBOL TABLE:
 0000000000000013 l       .comment	0000000000000000 $d.42
 0000000000000000 l       *ABS*	0000000000000000 $d.43
 0000000008007480 l     O .data	0000000000000028 .hidden vf2_riscv_rt::log::LOGGER
-0000000008005450 l     O .rodata	0000000000000030 .hidden anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186
+0000000008005450 l     O .rodata	0000000000000030 .hidden anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570
 000000000800151c l     F .text	00000000000000ee .hidden core::fmt::Write::write_char
 000000000800160a l     F .text	0000000000000016 .hidden core::fmt::Write::write_fmt
 0000000008001a8a l     F .text	0000000000000050 .hidden <vf2_riscv_rt::log::Logger as core::fmt::Write>::write_str
@@ -1075,7 +1075,7 @@ Disassembly of section .text:
 
 0000000008000576 <.Lpcrel_hi9>:
  8000576:	00005597          	auipc	a1,0x5
- 800057a:	eda58593          	addi	a1,a1,-294 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800057a:	eda58593          	addi	a1,a1,-294 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800057e:	19b0                	addi	a2,sp,248
  8000580:	00004097          	auipc	ra,0x4
  8000584:	bb8080e7          	jalr	-1096(ra) # 8004138 <core::fmt::write>
@@ -1084,7 +1084,7 @@ Disassembly of section .text:
 
 0000000008000590 <.Lpcrel_hi10>:
  8000590:	00005517          	auipc	a0,0x5
- 8000594:	bb050a13          	addi	s4,a0,-1104 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482>
+ 8000594:	bb050a13          	addi	s4,a0,-1104 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394>
  8000598:	fdd2                	sd	s4,248(sp)
  800059a:	4505                	li	a0,1
  800059c:	e22a                	sd	a0,256(sp)
@@ -1107,7 +1107,7 @@ Disassembly of section .text:
 
 00000000080005cc <.Lpcrel_hi11>:
  80005cc:	00005597          	auipc	a1,0x5
- 80005d0:	e8458593          	addi	a1,a1,-380 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80005d0:	e8458593          	addi	a1,a1,-380 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80005d4:	19b0                	addi	a2,sp,248
  80005d6:	00004097          	auipc	ra,0x4
  80005da:	b62080e7          	jalr	-1182(ra) # 8004138 <core::fmt::write>
@@ -1157,7 +1157,7 @@ Disassembly of section .text:
 
 0000000008000642 <.Lpcrel_hi19>:
  8000642:	00005517          	auipc	a0,0x5
- 8000646:	e0e50993          	addi	s3,a0,-498 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8000646:	e0e50993          	addi	s3,a0,-498 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800064a:	4d85                	li	s11,1
  800064c:	a809                	j	800065e <.Lpcrel_hi19+0x1c>
  800064e:	0d85                	addi	s11,s11,1
@@ -1840,7 +1840,7 @@ Disassembly of section .text:
 
 0000000008000d46 <.Lpcrel_hi21>:
  8000d46:	00004517          	auipc	a0,0x4
- 8000d4a:	54250b93          	addi	s7,a0,1346 # 8005288 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.37.llvm.15509408438570070482>
+ 8000d4a:	54250b93          	addi	s7,a0,1346 # 8005288 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.37.llvm.15149315670060530394>
  8000d4e:	4c09                	li	s8,2
 
 0000000008000d50 <.Lpcrel_hi22>:
@@ -1851,13 +1851,13 @@ Disassembly of section .text:
 
 0000000008000d60 <.Lpcrel_hi23>:
  8000d60:	00004517          	auipc	a0,0x4
- 8000d64:	3e050a13          	addi	s4,a0,992 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482>
+ 8000d64:	3e050a13          	addi	s4,a0,992 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394>
  8000d68:	08900c93          	li	s9,137
  8000d6c:	00848913          	addi	s2,s1,8
 
 0000000008000d70 <.Lpcrel_hi24>:
  8000d70:	00004517          	auipc	a0,0x4
- 8000d74:	6e050a93          	addi	s5,a0,1760 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8000d74:	6e050a93          	addi	s5,a0,1760 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8000d78:	4b05                	li	s6,1
  8000d7a:	a801                	j	8000d8a <.Lpcrel_hi24+0x1a>
  8000d7c:	0b05                	addi	s6,s6,1
@@ -1966,7 +1966,7 @@ Disassembly of section .text:
 
 0000000008000e74 <.Lpcrel_hi27>:
  8000e74:	00004517          	auipc	a0,0x4
- 8000e78:	44450c13          	addi	s8,a0,1092 # 80052b8 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.39.llvm.15509408438570070482>
+ 8000e78:	44450c13          	addi	s8,a0,1092 # 80052b8 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.39.llvm.15149315670060530394>
  8000e7c:	4c89                	li	s9,2
 
 0000000008000e7e <.Lpcrel_hi28>:
@@ -1977,12 +1977,12 @@ Disassembly of section .text:
 
 0000000008000e8e <.Lpcrel_hi29>:
  8000e8e:	00004517          	auipc	a0,0x4
- 8000e92:	2b250b13          	addi	s6,a0,690 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482>
+ 8000e92:	2b250b13          	addi	s6,a0,690 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394>
  8000e96:	00848913          	addi	s2,s1,8
 
 0000000008000e9a <.Lpcrel_hi30>:
  8000e9a:	00004517          	auipc	a0,0x4
- 8000e9e:	5b650d93          	addi	s11,a0,1462 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8000e9e:	5b650d93          	addi	s11,a0,1462 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8000ea2:	4d05                	li	s10,1
  8000ea4:	a811                	j	8000eb8 <.Lpcrel_hi30+0x1e>
  8000ea6:	2d05                	addiw	s10,s10,1
@@ -2082,7 +2082,7 @@ Disassembly of section .text:
 
 0000000008000f9a <.Lpcrel_hi31>:
  8000f9a:	00004517          	auipc	a0,0x4
- 8000f9e:	36e50513          	addi	a0,a0,878 # 8005308 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.42.llvm.15509408438570070482>
+ 8000f9e:	36e50513          	addi	a0,a0,878 # 8005308 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.42.llvm.15149315670060530394>
  8000fa2:	e42a                	sd	a0,8(sp)
  8000fa4:	450d                	li	a0,3
  8000fa6:	a025                	j	8000fce <.Lpcrel_hi34+0xc>
@@ -2091,17 +2091,17 @@ Disassembly of section .text:
 
 0000000008000fae <.Lpcrel_hi33>:
  8000fae:	00004517          	auipc	a0,0x4
- 8000fb2:	36d50513          	addi	a0,a0,877 # 800531b <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.44.llvm.15509408438570070482>
+ 8000fb2:	36d50513          	addi	a0,a0,877 # 800531b <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.44.llvm.15149315670060530394>
  8000fb6:	a811                	j	8000fca <.Lpcrel_hi34+0x8>
 
 0000000008000fb8 <.Lpcrel_hi32>:
  8000fb8:	00004517          	auipc	a0,0x4
- 8000fbc:	35750513          	addi	a0,a0,855 # 800530f <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.43.llvm.15509408438570070482>
+ 8000fbc:	35750513          	addi	a0,a0,855 # 800530f <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.43.llvm.15149315670060530394>
  8000fc0:	a029                	j	8000fca <.Lpcrel_hi34+0x8>
 
 0000000008000fc2 <.Lpcrel_hi34>:
  8000fc2:	00004517          	auipc	a0,0x4
- 8000fc6:	35150513          	addi	a0,a0,849 # 8005313 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15509408438570070482>
+ 8000fc6:	35150513          	addi	a0,a0,849 # 8005313 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15149315670060530394>
  8000fca:	e42a                	sd	a0,8(sp)
  8000fcc:	4511                	li	a0,4
  8000fce:	e82a                	sd	a0,16(sp)
@@ -2115,7 +2115,7 @@ Disassembly of section .text:
 
 0000000008000fde <.Lpcrel_hi36>:
  8000fde:	00004517          	auipc	a0,0x4
- 8000fe2:	35250513          	addi	a0,a0,850 # 8005330 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.47.llvm.15509408438570070482>
+ 8000fe2:	35250513          	addi	a0,a0,850 # 8005330 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.47.llvm.15149315670060530394>
  8000fe6:	f42a                	sd	a0,40(sp)
  8000fe8:	4505                	li	a0,1
  8000fea:	f82a                	sd	a0,48(sp)
@@ -2143,7 +2143,7 @@ Disassembly of section .text:
 
 0000000008001026 <.Lpcrel_hi38>:
  8001026:	00004597          	auipc	a1,0x4
- 800102a:	42a58593          	addi	a1,a1,1066 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800102a:	42a58593          	addi	a1,a1,1066 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800102e:	1030                	addi	a2,sp,40
  8001030:	00003097          	auipc	ra,0x3
  8001034:	108080e7          	jalr	264(ra) # 8004138 <core::fmt::write>
@@ -2152,7 +2152,7 @@ Disassembly of section .text:
 
 0000000008001040 <.Lpcrel_hi39>:
  8001040:	00004517          	auipc	a0,0x4
- 8001044:	10050513          	addi	a0,a0,256 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482>
+ 8001044:	10050513          	addi	a0,a0,256 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394>
  8001048:	f42a                	sd	a0,40(sp)
  800104a:	4505                	li	a0,1
  800104c:	f82a                	sd	a0,48(sp)
@@ -2175,7 +2175,7 @@ Disassembly of section .text:
 
 000000000800107c <.Lpcrel_hi40>:
  800107c:	00004597          	auipc	a1,0x4
- 8001080:	3d458593          	addi	a1,a1,980 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001080:	3d458593          	addi	a1,a1,980 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001084:	1030                	addi	a2,sp,40
  8001086:	00003097          	auipc	ra,0x3
  800108a:	0b2080e7          	jalr	178(ra) # 8004138 <core::fmt::write>
@@ -2217,7 +2217,7 @@ Disassembly of section .text:
 
 00000000080010dc <.Lpcrel_hi42>:
  80010dc:	00004597          	auipc	a1,0x4
- 80010e0:	27458593          	addi	a1,a1,628 # 8005350 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.49.llvm.15509408438570070482>
+ 80010e0:	27458593          	addi	a1,a1,628 # 8005350 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.49.llvm.15149315670060530394>
  80010e4:	e82e                	sd	a1,16(sp)
  80010e6:	ec2a                	sd	a0,24(sp)
  80010e8:	088c                	addi	a1,sp,80
@@ -2246,7 +2246,7 @@ Disassembly of section .text:
 
 0000000008001126 <.Lpcrel_hi44>:
  8001126:	00004597          	auipc	a1,0x4
- 800112a:	32a58593          	addi	a1,a1,810 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800112a:	32a58593          	addi	a1,a1,810 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800112e:	0810                	addi	a2,sp,16
  8001130:	00003097          	auipc	ra,0x3
  8001134:	008080e7          	jalr	8(ra) # 8004138 <core::fmt::write>
@@ -2278,7 +2278,7 @@ Disassembly of section .text:
 
 000000000800117c <.Lpcrel_hi46>:
  800117c:	00004597          	auipc	a1,0x4
- 8001180:	2d458593          	addi	a1,a1,724 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001180:	2d458593          	addi	a1,a1,724 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001184:	0890                	addi	a2,sp,80
  8001186:	00003097          	auipc	ra,0x3
  800118a:	fb2080e7          	jalr	-78(ra) # 8004138 <core::fmt::write>
@@ -2326,7 +2326,7 @@ Disassembly of section .text:
 
 00000000080011f0 <.Lpcrel_hi49>:
  80011f0:	00004597          	auipc	a1,0x4
- 80011f4:	26058593          	addi	a1,a1,608 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80011f4:	26058593          	addi	a1,a1,608 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80011f8:	0030                	addi	a2,sp,8
  80011fa:	00003097          	auipc	ra,0x3
  80011fe:	f3e080e7          	jalr	-194(ra) # 8004138 <core::fmt::write>
@@ -2335,7 +2335,7 @@ Disassembly of section .text:
 
 000000000800120a <.Lpcrel_hi50>:
  800120a:	00004517          	auipc	a0,0x4
- 800120e:	f3650513          	addi	a0,a0,-202 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482>
+ 800120e:	f3650513          	addi	a0,a0,-202 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394>
  8001212:	e42a                	sd	a0,8(sp)
  8001214:	4505                	li	a0,1
  8001216:	e82a                	sd	a0,16(sp)
@@ -2358,7 +2358,7 @@ Disassembly of section .text:
 
 0000000008001246 <.Lpcrel_hi51>:
  8001246:	00004597          	auipc	a1,0x4
- 800124a:	20a58593          	addi	a1,a1,522 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800124a:	20a58593          	addi	a1,a1,522 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800124e:	0030                	addi	a2,sp,8
  8001250:	00003097          	auipc	ra,0x3
  8001254:	ee8080e7          	jalr	-280(ra) # 8004138 <core::fmt::write>
@@ -2408,8 +2408,8 @@ Disassembly of section .text:
  80012d0:	120d0537          	lui	a0,0x120d0
  80012d4:	414c                	lw	a1,4(a0)
  80012d6:	e989                	bnez	a1,80012e8 <PTC0+0x22>
- 80012d8:	009895b7          	lui	a1,0x989
- 80012dc:	68058593          	addi	a1,a1,1664 # 989680 <_hart_stack_size+0x988680>
+ 80012d8:	004c55b7          	lui	a1,0x4c5
+ 80012dc:	b4058593          	addi	a1,a1,-1216 # 4c4b40 <_hart_stack_size+0x4c3b40>
  80012e0:	00452003          	lw	zero,4(a0) # 120d0004 <_sstack+0xa09e004>
  80012e4:	c14c                	sw	a1,4(a0)
  80012e6:	8082                	ret
@@ -2486,7 +2486,7 @@ Disassembly of section .text:
 
 000000000800139e <.Lpcrel_hi59>:
  800139e:	00004597          	auipc	a1,0x4
- 80013a2:	0b258593          	addi	a1,a1,178 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80013a2:	0b258593          	addi	a1,a1,178 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80013a6:	860a                	mv	a2,sp
  80013a8:	00003097          	auipc	ra,0x3
  80013ac:	d90080e7          	jalr	-624(ra) # 8004138 <core::fmt::write>
@@ -2495,7 +2495,7 @@ Disassembly of section .text:
 
 00000000080013b8 <.Lpcrel_hi60>:
  80013b8:	00004517          	auipc	a0,0x4
- 80013bc:	d8850513          	addi	a0,a0,-632 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482>
+ 80013bc:	d8850513          	addi	a0,a0,-632 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394>
  80013c0:	e02a                	sd	a0,0(sp)
  80013c2:	4505                	li	a0,1
  80013c4:	e42a                	sd	a0,8(sp)
@@ -2518,7 +2518,7 @@ Disassembly of section .text:
 
 00000000080013f4 <.Lpcrel_hi61>:
  80013f4:	00004597          	auipc	a1,0x4
- 80013f8:	05c58593          	addi	a1,a1,92 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80013f8:	05c58593          	addi	a1,a1,92 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80013fc:	860a                	mv	a2,sp
  80013fe:	00003097          	auipc	ra,0x3
  8001402:	d3a080e7          	jalr	-710(ra) # 8004138 <core::fmt::write>
@@ -2588,7 +2588,7 @@ Disassembly of section .text:
 
 00000000080014a2 <.Lpcrel_hi65>:
  80014a2:	00004597          	auipc	a1,0x4
- 80014a6:	fae58593          	addi	a1,a1,-82 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80014a6:	fae58593          	addi	a1,a1,-82 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80014aa:	0030                	addi	a2,sp,8
  80014ac:	00003097          	auipc	ra,0x3
  80014b0:	c8c080e7          	jalr	-884(ra) # 8004138 <core::fmt::write>
@@ -2597,7 +2597,7 @@ Disassembly of section .text:
 
 00000000080014bc <.Lpcrel_hi66>:
  80014bc:	00004517          	auipc	a0,0x4
- 80014c0:	c8450513          	addi	a0,a0,-892 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482>
+ 80014c0:	c8450513          	addi	a0,a0,-892 # 8005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394>
  80014c4:	e42a                	sd	a0,8(sp)
  80014c6:	4505                	li	a0,1
  80014c8:	e82a                	sd	a0,16(sp)
@@ -2620,7 +2620,7 @@ Disassembly of section .text:
 
 00000000080014f8 <.Lpcrel_hi67>:
  80014f8:	00004597          	auipc	a1,0x4
- 80014fc:	f5858593          	addi	a1,a1,-168 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80014fc:	f5858593          	addi	a1,a1,-168 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001500:	0030                	addi	a2,sp,8
  8001502:	00003097          	auipc	ra,0x3
  8001506:	c36080e7          	jalr	-970(ra) # 8004138 <core::fmt::write>
@@ -2713,7 +2713,7 @@ Disassembly of section .text:
 
 000000000800160a <core::fmt::Write::write_fmt>:
  800160a:	00004617          	auipc	a2,0x4
- 800160e:	e4660613          	addi	a2,a2,-442 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800160e:	e4660613          	addi	a2,a2,-442 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001612:	86ae                	mv	a3,a1
  8001614:	85b2                	mv	a1,a2
  8001616:	8636                	mv	a2,a3
@@ -2787,7 +2787,7 @@ Disassembly of section .text:
 
 00000000080016bc <.Lpcrel_hi4>:
  80016bc:	00004597          	auipc	a1,0x4
- 80016c0:	d9458593          	addi	a1,a1,-620 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80016c0:	d9458593          	addi	a1,a1,-620 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80016c4:	0090                	addi	a2,sp,64
  80016c6:	00003097          	auipc	ra,0x3
  80016ca:	a72080e7          	jalr	-1422(ra) # 8004138 <core::fmt::write>
@@ -2819,7 +2819,7 @@ Disassembly of section .text:
 
 0000000008001712 <.Lpcrel_hi6>:
  8001712:	00004597          	auipc	a1,0x4
- 8001716:	d3e58593          	addi	a1,a1,-706 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001716:	d3e58593          	addi	a1,a1,-706 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800171a:	0910                	addi	a2,sp,144
  800171c:	00003097          	auipc	ra,0x3
  8001720:	a1c080e7          	jalr	-1508(ra) # 8004138 <core::fmt::write>
@@ -2915,7 +2915,7 @@ Disassembly of section .text:
 
 0000000008001818 <.Lpcrel_hi12>:
  8001818:	00004597          	auipc	a1,0x4
- 800181c:	c3858593          	addi	a1,a1,-968 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800181c:	c3858593          	addi	a1,a1,-968 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001820:	0090                	addi	a2,sp,64
  8001822:	00003097          	auipc	ra,0x3
  8001826:	916080e7          	jalr	-1770(ra) # 8004138 <core::fmt::write>
@@ -2943,7 +2943,7 @@ Disassembly of section .text:
 
 0000000008001866 <.Lpcrel_hi13>:
  8001866:	00004597          	auipc	a1,0x4
- 800186a:	bea58593          	addi	a1,a1,-1046 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800186a:	bea58593          	addi	a1,a1,-1046 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800186e:	0910                	addi	a2,sp,144
  8001870:	00003097          	auipc	ra,0x3
  8001874:	8c8080e7          	jalr	-1848(ra) # 8004138 <core::fmt::write>
@@ -3031,7 +3031,7 @@ Disassembly of section .text:
 
 000000000800195a <.Lpcrel_hi17>:
  800195a:	00004597          	auipc	a1,0x4
- 800195e:	af658593          	addi	a1,a1,-1290 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800195e:	af658593          	addi	a1,a1,-1290 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001962:	0090                	addi	a2,sp,64
  8001964:	00002097          	auipc	ra,0x2
  8001968:	7d4080e7          	jalr	2004(ra) # 8004138 <core::fmt::write>
@@ -3059,7 +3059,7 @@ Disassembly of section .text:
 
 00000000080019a8 <.Lpcrel_hi18>:
  80019a8:	00004597          	auipc	a1,0x4
- 80019ac:	aa858593          	addi	a1,a1,-1368 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80019ac:	aa858593          	addi	a1,a1,-1368 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80019b0:	0910                	addi	a2,sp,144
  80019b2:	00002097          	auipc	ra,0x2
  80019b6:	786080e7          	jalr	1926(ra) # 8004138 <core::fmt::write>
@@ -3100,7 +3100,7 @@ Disassembly of section .text:
 
 0000000008001a12 <.Lpcrel_hi21>:
  8001a12:	00004597          	auipc	a1,0x4
- 8001a16:	a3e58593          	addi	a1,a1,-1474 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001a16:	a3e58593          	addi	a1,a1,-1474 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001a1a:	0910                	addi	a2,sp,144
  8001a1c:	00002097          	auipc	ra,0x2
  8001a20:	71c080e7          	jalr	1820(ra) # 8004138 <core::fmt::write>
@@ -3128,7 +3128,7 @@ Disassembly of section .text:
 
 0000000008001a60 <.Lpcrel_hi22>:
  8001a60:	00004597          	auipc	a1,0x4
- 8001a64:	9f058593          	addi	a1,a1,-1552 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001a64:	9f058593          	addi	a1,a1,-1552 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001a68:	0910                	addi	a2,sp,144
  8001a6a:	00002097          	auipc	ra,0x2
  8001a6e:	6ce080e7          	jalr	1742(ra) # 8004138 <core::fmt::write>
@@ -3231,7 +3231,7 @@ Disassembly of section .text:
 
 0000000008001b54 <.Lpcrel_hi28>:
  8001b54:	00004597          	auipc	a1,0x4
- 8001b58:	8fc58593          	addi	a1,a1,-1796 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001b58:	8fc58593          	addi	a1,a1,-1796 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001b5c:	0830                	addi	a2,sp,24
  8001b5e:	00002097          	auipc	ra,0x2
  8001b62:	5da080e7          	jalr	1498(ra) # 8004138 <core::fmt::write>
@@ -3263,7 +3263,7 @@ Disassembly of section .text:
 
 0000000008001baa <.Lpcrel_hi30>:
  8001baa:	00004597          	auipc	a1,0x4
- 8001bae:	8a658593          	addi	a1,a1,-1882 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001bae:	8a658593          	addi	a1,a1,-1882 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001bb2:	0830                	addi	a2,sp,24
  8001bb4:	00002097          	auipc	ra,0x2
  8001bb8:	584080e7          	jalr	1412(ra) # 8004138 <core::fmt::write>
@@ -3307,7 +3307,7 @@ Disassembly of section .text:
 
 0000000008001c16 <.Lpcrel_hi33>:
  8001c16:	00004597          	auipc	a1,0x4
- 8001c1a:	83a58593          	addi	a1,a1,-1990 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001c1a:	83a58593          	addi	a1,a1,-1990 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001c1e:	0030                	addi	a2,sp,8
  8001c20:	00002097          	auipc	ra,0x2
  8001c24:	518080e7          	jalr	1304(ra) # 8004138 <core::fmt::write>
@@ -3339,7 +3339,7 @@ Disassembly of section .text:
 
 0000000008001c6c <.Lpcrel_hi35>:
  8001c6c:	00003597          	auipc	a1,0x3
- 8001c70:	7e458593          	addi	a1,a1,2020 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8001c70:	7e458593          	addi	a1,a1,2020 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8001c74:	0030                	addi	a2,sp,8
  8001c76:	00002097          	auipc	ra,0x2
  8001c7a:	4c2080e7          	jalr	1218(ra) # 8004138 <core::fmt::write>
@@ -3721,8 +3721,8 @@ Disassembly of section .text:
  8002146:	30b52223          	sw	a1,772(a0)
  800214a:	120d0537          	lui	a0,0x120d0
  800214e:	00852003          	lw	zero,8(a0) # 120d0008 <_sstack+0xa09e008>
- 8002152:	009895b7          	lui	a1,0x989
- 8002156:	68058593          	addi	a1,a1,1664 # 989680 <_hart_stack_size+0x988680>
+ 8002152:	004c55b7          	lui	a1,0x4c5
+ 8002156:	b4058593          	addi	a1,a1,-1216 # 4c4b40 <_hart_stack_size+0x4c3b40>
  800215a:	c50c                	sw	a1,8(a0)
  800215c:	00452003          	lw	zero,4(a0)
  8002160:	c14c                	sw	a1,4(a0)
@@ -3778,7 +3778,7 @@ Disassembly of section .text:
 
 00000000080021fa <.Lpcrel_hi46>:
  80021fa:	00003597          	auipc	a1,0x3
- 80021fe:	25658593          	addi	a1,a1,598 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80021fe:	25658593          	addi	a1,a1,598 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8002202:	860a                	mv	a2,sp
  8002204:	00002097          	auipc	ra,0x2
  8002208:	f34080e7          	jalr	-204(ra) # 8004138 <core::fmt::write>
@@ -3811,7 +3811,7 @@ Disassembly of section .text:
 
 0000000008002254 <.Lpcrel_hi48>:
  8002254:	00003597          	auipc	a1,0x3
- 8002258:	1fc58593          	addi	a1,a1,508 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8002258:	1fc58593          	addi	a1,a1,508 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800225c:	860a                	mv	a2,sp
  800225e:	00002097          	auipc	ra,0x2
  8002262:	eda080e7          	jalr	-294(ra) # 8004138 <core::fmt::write>
@@ -3852,7 +3852,7 @@ Disassembly of section .text:
 
 00000000080022ce <.Lpcrel_hi50>:
  80022ce:	00003597          	auipc	a1,0x3
- 80022d2:	18258593          	addi	a1,a1,386 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80022d2:	18258593          	addi	a1,a1,386 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80022d6:	860a                	mv	a2,sp
  80022d8:	00002097          	auipc	ra,0x2
  80022dc:	e60080e7          	jalr	-416(ra) # 8004138 <core::fmt::write>
@@ -3881,7 +3881,7 @@ Disassembly of section .text:
 
 0000000008002320 <.Lpcrel_hi51>:
  8002320:	00003597          	auipc	a1,0x3
- 8002324:	13058593          	addi	a1,a1,304 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8002324:	13058593          	addi	a1,a1,304 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8002328:	860a                	mv	a2,sp
  800232a:	00002097          	auipc	ra,0x2
  800232e:	e0e080e7          	jalr	-498(ra) # 8004138 <core::fmt::write>
@@ -3916,7 +3916,7 @@ Disassembly of section .text:
 
 0000000008002382 <.Lpcrel_hi53>:
  8002382:	00003597          	auipc	a1,0x3
- 8002386:	0ce58593          	addi	a1,a1,206 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8002386:	0ce58593          	addi	a1,a1,206 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800238a:	860a                	mv	a2,sp
  800238c:	00002097          	auipc	ra,0x2
  8002390:	dac080e7          	jalr	-596(ra) # 8004138 <core::fmt::write>
@@ -3945,7 +3945,7 @@ Disassembly of section .text:
 
 00000000080023d4 <.Lpcrel_hi54>:
  80023d4:	00003597          	auipc	a1,0x3
- 80023d8:	07c58593          	addi	a1,a1,124 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80023d8:	07c58593          	addi	a1,a1,124 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80023dc:	860a                	mv	a2,sp
  80023de:	00002097          	auipc	ra,0x2
  80023e2:	d5a080e7          	jalr	-678(ra) # 8004138 <core::fmt::write>
@@ -3980,7 +3980,7 @@ Disassembly of section .text:
 
 0000000008002436 <.Lpcrel_hi56>:
  8002436:	00003597          	auipc	a1,0x3
- 800243a:	01a58593          	addi	a1,a1,26 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800243a:	01a58593          	addi	a1,a1,26 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800243e:	860a                	mv	a2,sp
  8002440:	00002097          	auipc	ra,0x2
  8002444:	cf8080e7          	jalr	-776(ra) # 8004138 <core::fmt::write>
@@ -4009,7 +4009,7 @@ Disassembly of section .text:
 
 0000000008002488 <.Lpcrel_hi57>:
  8002488:	00003597          	auipc	a1,0x3
- 800248c:	fc858593          	addi	a1,a1,-56 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 800248c:	fc858593          	addi	a1,a1,-56 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  8002490:	860a                	mv	a2,sp
  8002492:	00002097          	auipc	ra,0x2
  8002496:	ca6080e7          	jalr	-858(ra) # 8004138 <core::fmt::write>
@@ -4045,7 +4045,7 @@ Disassembly of section .text:
 
 00000000080024ea <.Lpcrel_hi41>:
  80024ea:	00003597          	auipc	a1,0x3
- 80024ee:	f6658593          	addi	a1,a1,-154 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 80024ee:	f6658593          	addi	a1,a1,-154 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  80024f2:	860a                	mv	a2,sp
  80024f4:	00002097          	auipc	ra,0x2
  80024f8:	c44080e7          	jalr	-956(ra) # 8004138 <core::fmt::write>
@@ -4078,7 +4078,7 @@ Disassembly of section .text:
 
 0000000008002544 <.Lpcrel_hi43>:
  8002544:	00003597          	auipc	a1,0x3
- 8002548:	f0c58593          	addi	a1,a1,-244 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>
+ 8002548:	f0c58593          	addi	a1,a1,-244 # 8005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>
  800254c:	860a                	mv	a2,sp
  800254e:	00002097          	auipc	ra,0x2
  8002552:	bea080e7          	jalr	-1046(ra) # 8004138 <core::fmt::write>
@@ -6120,7 +6120,7 @@ Disassembly of section .text:
 
 0000000008003d5a <.Lpcrel_hi382>:
  8003d5a:	00001517          	auipc	a0,0x1
- 8003d5e:	5bd50513          	addi	a0,a0,1469 # 8005317 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15509408438570070482+0x4>
+ 8003d5e:	5bd50513          	addi	a0,a0,1469 # 8005317 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15149315670060530394+0x4>
  8003d62:	f8a43023          	sd	a0,-128(s0)
  8003d66:	4d29                	li	s10,10
  8003d68:	f6943823          	sd	s1,-144(s0)
@@ -6266,7 +6266,7 @@ Disassembly of section .text:
 
 0000000008003ef2 <.Lpcrel_hi384>:
  8003ef2:	00001517          	auipc	a0,0x1
- 8003ef6:	42550693          	addi	a3,a0,1061 # 8005317 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15509408438570070482+0x4>
+ 8003ef6:	42550693          	addi	a3,a0,1061 # 8005317 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15149315670060530394+0x4>
  8003efa:	4611                	li	a2,4
  8003efc:	854a                	mv	a0,s2
  8003efe:	8a2e                	mv	s4,a1
@@ -7183,7 +7183,7 @@ Disassembly of section .text:
 
 000000000800481e <.Lpcrel_hi552>:
  800481e:	00001597          	auipc	a1,0x1
- 8004822:	aed58593          	addi	a1,a1,-1299 # 800530b <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.42.llvm.15509408438570070482+0x3>
+ 8004822:	aed58593          	addi	a1,a1,-1299 # 800530b <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.42.llvm.15149315670060530394+0x3>
  8004826:	4611                	li	a2,4
  8004828:	60a2                	ld	ra,8(sp)
  800482a:	6402                	ld	s0,0(sp)
@@ -8145,13 +8145,13 @@ Disassembly of section .rodata:
  8005134:	0000                	unimp
 	...
 
-0000000008005138 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.22.llvm.15509408438570070482>:
+0000000008005138 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.22.llvm.15149315670060530394>:
  8005138:	0a0d                	addi	s4,s4,3
  800513a:	0000                	unimp
  800513c:	0000                	unimp
 	...
 
-0000000008005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15509408438570070482>:
+0000000008005140 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.23.llvm.15149315670060530394>:
  8005140:	5138                	lw	a4,96(a0)
  8005142:	0800                	addi	s0,sp,16
  8005144:	0000                	unimp
@@ -8327,7 +8327,7 @@ Disassembly of section .rodata:
  800526c:	0000                	unimp
 	...
 
-0000000008005270 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.35.llvm.15509408438570070482>:
+0000000008005270 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.35.llvm.15149315670060530394>:
  8005270:	6e49                	lui	t3,0x12
  8005272:	6574                	ld	a3,200(a0)
  8005274:	7272                	ld	tp,312(sp)
@@ -8335,7 +8335,7 @@ Disassembly of section .rodata:
  8005278:	3a74                	fld	fa3,240(a2)
  800527a:	                	fld	fs0,88(s0)
 
-000000000800527b <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.36.llvm.15509408438570070482>:
+000000000800527b <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.36.llvm.15149315670060530394>:
  800527b:	202c                	fld	fa1,64(s0)
  800527d:	7250                	ld	a2,160(a2)
  800527f:	6f69                	lui	t5,0x1a
@@ -8344,7 +8344,7 @@ Disassembly of section .rodata:
  8005285:	203a                	fld	ft0,392(sp)
 	...
 
-0000000008005288 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.37.llvm.15509408438570070482>:
+0000000008005288 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.37.llvm.15149315670060530394>:
  8005288:	5270                	lw	a2,100(a2)
  800528a:	0800                	addi	s0,sp,16
  800528c:	0000                	unimp
@@ -8360,7 +8360,7 @@ Disassembly of section .rodata:
  80052a4:	0000                	unimp
 	...
 
-00000000080052a8 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.38.llvm.15509408438570070482>:
+00000000080052a8 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.38.llvm.15149315670060530394>:
  80052a8:	202c                	fld	fa1,64(s0)
  80052aa:	6550                	ld	a2,136(a0)
  80052ac:	646e                	ld	s0,216(sp)
@@ -8369,7 +8369,7 @@ Disassembly of section .rodata:
  80052b4:	0000                	unimp
 	...
 
-00000000080052b8 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.39.llvm.15509408438570070482>:
+00000000080052b8 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.39.llvm.15149315670060530394>:
  80052b8:	5270                	lw	a2,100(a2)
  80052ba:	0800                	addi	s0,sp,16
  80052bc:	0000                	unimp
@@ -8413,26 +8413,26 @@ Disassembly of section .rodata:
  8005304:	0000                	unimp
 	...
 
-0000000008005308 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.42.llvm.15509408438570070482>:
+0000000008005308 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.42.llvm.15149315670060530394>:
  8005308:	74495053          	.insn	4, 0x74495053
  800530c:	7572                	ld	a0,312(sp)
  800530e:	                	li	s10,25
 
-000000000800530f <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.43.llvm.15509408438570070482>:
+000000000800530f <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.43.llvm.15149315670060530394>:
  800530f:	4d4d                	li	s10,19
  8005311:	          	fmadd.s	ft4,fa0,fs5,fs0,rup
 
-0000000008005313 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15509408438570070482>:
+0000000008005313 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.45.llvm.15149315670060530394>:
  8005313:	4155                	li	sp,21
  8005315:	5452                	lw	s0,52(sp)
  8005317:	2020                	fld	fs0,64(s0)
  8005319:	2020                	fld	fs0,64(s0)
 
-000000000800531b <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.44.llvm.15509408438570070482>:
+000000000800531b <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.44.llvm.15149315670060530394>:
  800531b:	4d4d                	li	s10,19
  800531d:	          	.insn	4, 0x6f623143
 
-000000000800531f <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.46.llvm.15509408438570070482>:
+000000000800531f <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.46.llvm.15149315670060530394>:
  800531f:	6f62                	ld	t5,24(sp)
  8005321:	6d20746f          	jal	s0,800c9f3 <__global_pointer$+0x4f33>
  8005325:	3a65646f          	jal	s0,805b6cb <_sstack+0x296cb>
@@ -8441,14 +8441,14 @@ Disassembly of section .rodata:
  800532d:	0000                	unimp
 	...
 
-0000000008005330 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.47.llvm.15509408438570070482>:
+0000000008005330 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.47.llvm.15149315670060530394>:
  8005330:	531f 0800 0000      	.insn	6, 0x0800531f
  8005336:	0000                	unimp
  8005338:	0000000b          	.insn	4, 0x000b
  800533c:	0000                	unimp
 	...
 
-0000000008005340 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.48.llvm.15509408438570070482>:
+0000000008005340 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.48.llvm.15149315670060530394>:
  8005340:	4155                	li	sp,21
  8005342:	5452                	lw	s0,52(sp)
  8005344:	2030                	fld	fa2,64(s0)
@@ -8458,7 +8458,7 @@ Disassembly of section .rodata:
  800534c:	0000                	unimp
 	...
 
-0000000008005350 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.49.llvm.15509408438570070482>:
+0000000008005350 <anon.dcf6fa3edbf04ae31d3b20daf87a78f1.49.llvm.15149315670060530394>:
  8005350:	5340                	lw	s0,36(a4)
  8005352:	0800                	addi	s0,sp,16
  8005354:	0000                	unimp
@@ -8593,7 +8593,7 @@ Disassembly of section .rodata:
  800544c:	0000                	unimp
 	...
 
-0000000008005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.17430092513767786186>:
+0000000008005450 <anon.6af9f5559dc351617aa8e8af39d17f78.0.llvm.7408044777393095570>:
 	...
  8005458:	0020                	addi	s0,sp,8
  800545a:	0000                	unimp

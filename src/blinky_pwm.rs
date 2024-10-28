@@ -17,8 +17,8 @@ pub fn configure() {
         .rst3()
         .modify(|_, w| w.u0_pwm_apb().none());
     //Set the low and high counter values
-    p.pwm.lrc().modify(|_, w| w.lrc().variant(10_000_000u32));
-    p.pwm.hrc().modify(|_, w| w.hrc().variant(10_000_000u32));
+    p.pwm.lrc().modify(|_, w| w.lrc().variant(5_000_000u32));
+    p.pwm.hrc().modify(|_, w| w.hrc().variant(5_000_000u32));
     //Setup the control register
     p.pwm.ctrl().modify(|_, w| {
         w.en()
@@ -55,7 +55,7 @@ pub fn configure() {
         w.ie()
             .clear_bit() //disable interrupts
             .ds()
-            .variant(0b11) //configure deive strength to use function?
+            .variant(0b11) //output strength 12mA
             .pu()
             .clear_bit() //disable the pull-up
             .pd()
@@ -79,7 +79,7 @@ fn ptc0() {
     //Set the low and high counter values
     let mut current_hrc = p.pwm.hrc().read().bits();
     if current_hrc == 0 {
-        current_hrc = 10_000_000u32;
+        current_hrc = 5_000_000u32;
     } else {
         current_hrc -= 1;
     }
