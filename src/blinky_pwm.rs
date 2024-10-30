@@ -53,7 +53,7 @@ pub fn configure() {
     //Setup the pad config for pin 56
     p.sys_pinctrl.padcfg().gpio56().modify(|_, w| {
         w.ie()
-            .clear_bit() //disable interrupts
+            .clear_bit() //input disabled
             .ds()
             .variant(0b11) //output strength 12mA
             .pu()
@@ -61,9 +61,9 @@ pub fn configure() {
             .pd()
             .clear_bit() //disable the pull-down
             .slew()
-            .clear_bit() //set sluw rate to slow (i dont know what effec this has)
+            .set_bit() //set slwe rate to fast (Im assuming I want fast transitions)
             .smt()
-            .clear_bit() //disable the schmitt trigger
+            .clear_bit() //disable the schmitt trigger (Dont care for output)
             .pos()
             .clear_bit() //disable active pull down capability
     });
