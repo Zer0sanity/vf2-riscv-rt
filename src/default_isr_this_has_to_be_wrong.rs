@@ -402,7 +402,7 @@ pac::interrupt!(ETH_LPI1, default_handler);
 pac::interrupt!(ETH_WAKE_IRQ1, default_handler);
 pac::interrupt!(MACIRQ1, default_handler);
 pac::interrupt!(AON_IOMUX, default_handler);
-pac::interrupt!(SYS_IOMUX, default_handler);
+//pac::interrupt!(SYS_IOMUX, default_handler);
 pac::interrupt!(HOST0, default_handler);
 pac::interrupt!(PERIPHERAL0, default_handler);
 pac::interrupt!(OTG0, default_handler);

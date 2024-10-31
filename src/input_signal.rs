@@ -18,11 +18,20 @@
 //stable.  Id probably have to add extra logic around that to detect that when the signal is
 //detected as stable that it is still at the logic I expect, but that's the just of it.
 
-use jh7110_hal::gpio::Pad;
-use jh7110_pac::{self as pac, gmac0::phyif_ctrl_status::FalsecardetW};
+use core::mem::MaybeUninit;
 
+//use jh7110_hal::gpio::Pad;
+use crate::array_vec::ArrayVec;
 use crate::println;
+use jh7110_pac::{self as pac};
 
+#[derive(Copy, Clone)]
+enum LogicState {
+    ActiveHigh,
+    ActiveLow,
+}
+
+#[derive(Copy, Clone)]
 enum InputSignalState {
     Unknown,
     StableLow,
@@ -31,42 +40,78 @@ enum InputSignalState {
     StabilizingLow,
 }
 
-struct Signal {
+#[derive(Copy, Clone)]
+pub struct Signal {
     pub pin_number: u32,
+    pub logic_state: LogicState,
     pub state: InputSignalState,
     pub rising_edge_callback: fn(),
     pub falling_edge_callback: fn(),
 }
 
-struct Signals {
-    pub num_signals: usize,
-    pub signals: [Signal; 1],
-}
+const NUMBER_GPIO: usize = 63;
+static mut SIGNALS: ArrayVec<Signal, NUMBER_GPIO> = ArrayVec {
+    length: 0,
+    items: [MaybeUninit::<Signal>::uninit(); NUMBER_GPIO],
+};
 
-impl Signals {
-    fn new() -> Self {
-        Signals {
-            num_signals: 1,
-            signals: [Signal {
-                pin_number: 37,
-                state: InputSignalState::Unknown,
-                rising_edge_callback: || {
-                    println!("Rising");
-                },
-                falling_edge_callback: || {
-                    println!("Falling");
-                },
-            }],
+pub fn configure() {
+    //Set length here.  There seems to be an error with initialization.  Refer to below for fix
+    // https://docs.rust-embedded.org/embedonomicon/main.html#life-before-main
+    unsafe {
+        SIGNALS.length = 0;
+    }
+    println!("Before insert loop");
+    for i in 1..11 {
+        println!("Signal Created");
+        let s = Signal {
+            pin_number: i,
+            logic_state: LogicState::ActiveLow,
+            state: InputSignalState::Unknown,
+            rising_edge_callback: || {
+                println!("Rising");
+            },
+            falling_edge_callback: || {
+                println!("Falling");
+            },
+        };
+
+        println!("Before Push");
+
+        unsafe {
+            if let Err(_) = SIGNALS.try_push(s) {
+                println!("Error Push");
+            }
+        };
+    }
+    println!("After insert loop");
+
+    unsafe {
+        for s in SIGNALS.iter() {
+            println!("Hi: {}", s.pin_number);
         }
     }
 
-    fn add(signal: Signal) {}
-}
+    println!("After interator");
 
-static mut SIGNALS: Option<Signals> = None;
+    println!("Before Mut Interator");
+    unsafe {
+        for s in SIGNALS.iter_mut() {
+            s.pin_number += 10;
+        }
+    }
 
-pub fn configure() {
-    //GPIO37
+    println!("After Mut Iterator");
+
+    println!("After mut interator loop");
+
+    unsafe {
+        for s in SIGNALS.iter() {
+            println!("Hi: {}", s.pin_number);
+        }
+    }
+
+    println!("After mut interator");
 
     //Setup input_signal structure list
     //Get GPIO
@@ -78,22 +123,14 @@ pub fn configure() {
     //IEV (Interrupt Event) = Don't care
     //
 
-    //let mut gpio40_out = gpio40.into_enabled_output();
-
-    //I dont think this is needed.  dout should be ignored.
-    //Setup the output function for pin 37 (0)
-    //p.sys_pinctrl
-    //    .gpo_dout()
-    //    .gpo_dout9()
-    //    .modify(|_, w| w.dout37().variant(0)); //Set output signal to 0
-
     let pinctrl = unsafe { &*pac::SysPinctrl::ptr() };
     //Setup the output enable function for pin 37 (0)
     pinctrl
         .gpo_doen()
         .gpo_doen9()
         .modify(|_, w| w.doen37().variant(1)); //Set pin as an input (0 output, 1 input)
-                                               //Setup the pad config for pin 37
+
+    //Setup the pad config for pin 37
     pinctrl.padcfg().gpio37().modify(|_, w| {
         w.ie()
             .set_bit() //enable input
@@ -112,11 +149,6 @@ pub fn configure() {
             .clear_bit() //disable active pull down capability
     });
 
-    let s = Signals::new();
-    unsafe {
-        SIGNALS.replace(s);
-    }
-
     let pad = 37u32;
     let pad_per_reg = 32u32;
     //Enable GPIO IRQ function.  Note this also is needed just to enable reading of pins
@@ -127,53 +159,42 @@ pub fn configure() {
         .ioirq2()
         .write(|w| w.is1().variant(1 << (pad_per_reg - pad)));
 
-    let mut lastvalue = false;
-    loop {
-        unsafe {
-            if let Some(ref signals) = SIGNALS {
-                for s in 0..signals.num_signals {
-                    let signal = &signals.signals[s];
-                    let pad = signal.pin_number;
-                    let mut value = false;
-                    if pad < pad_per_reg {
-                        value = (pinctrl.ioirq().ioirq15().read().bits() >> pad) & 0x1 != 0;
-                    } else if pad < u32::from(Pad::Gpio63) {
-                        let idx = pad.saturating_sub(pad_per_reg);
-                        value = (pinctrl.ioirq().ioirq16().read().bits() >> idx) & 0x1 != 0;
-                    }
+    //let mut lastvalue = false;
+    //let signals = unsafe {SIGNALS};
+    //loop {
+    //    unsafe {
+    //        for s in signals {
 
-                    if value != lastvalue {
-                        match value {
-                            true => {
-                                (signal.rising_edge_callback)();
-                            }
-                            false => {
-                                (signal.falling_edge_callback)();
-                            }
-                        }
-                        lastvalue = value;
-                    }
-                }
-            }
-        }
+    //        }
+    //        let signals = SIGNALS {
+    //            for s in 0..signals.num_signals {
+    //                let signal = &signals.signals[s];
+    //                let pad = signal.pin_number;
+    //                let mut value = false;
+    //                if pad < pad_per_reg {
+    //                    value = (pinctrl.ioirq().ioirq15().read().bits() >> pad) & 0x1 != 0;
+    //                } else if pad < u32::from(Pad::Gpio63) {
+    //                    let idx = pad.saturating_sub(pad_per_reg);
+    //                    value = (pinctrl.ioirq().ioirq16().read().bits() >> idx) & 0x1 != 0;
+    //                }
 
-        //        let idx = pad.saturating_sub(pad_per_reg);
-        //        //let value = pinctrl.ioirq().ioirq16().read().bits();
-        //        let value = (pinctrl.ioirq().ioirq16().read().bits() >> idx) & 0x1;
-        //        if value != lastvalue {
-        //            println!("Pin State: {}", value);
-        //            lastvalue = value;
-        //        }
-
-        //if pad < pad_per_reg {
-        //    let value = (pinctrl.ioirq().ioirq15().read().bits() >> pad) & 0x1 != 0;
-        //    println!("Pin Value: {}", value);
-        //} else if pad < u32::from(Pad::Gpio63) {
-        //    let idx = pad.saturating_sub(pad_per_reg);
-        //    let value = (pinctrl.ioirq().ioirq16().read().bits() >> idx) & 0x1 != 0;
-        //    println!("Pin Value: {}", value);
-        //} else {
-        //    println!("Error");
-        //}
-    }
+    //                if value != lastvalue {
+    //                    match value {
+    //                        true => {
+    //                            (signal.rising_edge_callback)();
+    //                        }
+    //                        false => {
+    //                            (signal.falling_edge_callback)();
+    //                        }
+    //                    }
+    //                    lastvalue = value;
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 }
+
+pac::interrupt!(SYS_IOMUX, signal_change_handler);
+#[no_mangle]
+fn signal_change_handler() {}

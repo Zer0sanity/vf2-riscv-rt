@@ -3,6 +3,7 @@
 
 extern crate panic_halt;
 
+mod array_vec;
 mod blinky;
 mod blinky_pwm;
 mod default_isr_this_has_to_be_wrong;
@@ -111,7 +112,7 @@ fn main() -> ! {
             default_isr_this_has_to_be_wrong::clear_interrupt_priotiry_all();
             blinky::configure();
             blinky_pwm::configure();
-            //input_signal::configure();
+            input_signal::configure();
             println!("back in main about to spin after setting up blinky");
             init::print_uart_isr_reg();
             default_isr_this_has_to_be_wrong::print_interrupt_enable();
@@ -125,7 +126,7 @@ fn main() -> ! {
                 println!("Enabeling interrupts");
                 riscv::register::mstatus::set_mie();
             }
-            input_signal::configure();
+            //input_signal::configure();
         }
         _ => {}
     }
