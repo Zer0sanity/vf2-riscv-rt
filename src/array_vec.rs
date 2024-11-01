@@ -1,15 +1,32 @@
 use core::mem::MaybeUninit;
 
+use crate::println;
+
 pub struct ArrayVec<T, const N: usize> {
-    pub length: usize,
-    pub items: [MaybeUninit<T>; N],
+    length: usize,
+    items: [MaybeUninit<T>; N],
 }
 
 impl<T, const N: usize> ArrayVec<T, N> {
+    const ITEM: MaybeUninit<T> = MaybeUninit::uninit();
+    const ITEMS: [MaybeUninit<T>; N] = [Self::ITEM; N];
+
+    pub const fn new() -> Self {
+        Self {
+            length: 0,
+            items: Self::ITEMS,
+        }
+    }
+
+    pub fn init(&mut self) {
+        self.length = 0;
+    }
+
     pub fn try_push(&mut self, value: T) -> Result<(), T> {
         if self.length == N {
             return Err(value);
         }
+        println!("Length: {}", self.length);
         self.items[self.length].write(value);
         self.length += 1;
         return Ok(());
