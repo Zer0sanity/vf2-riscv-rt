@@ -1,4 +1,3 @@
-use crate::{default_isr_this_has_to_be_wrong, println};
 use embedded_hal::digital::OutputPin;
 use jh7110_hal::gpio;
 use jh7110_pac as pac;
@@ -23,12 +22,8 @@ pub fn configure() {
     }
 }
 
-const PERIOD: u32 = 20000;
-static mut DUTY_CYCLE: u32 = 0;
-
 #[riscv_rt::core_interrupt(Interrupt::MachineTimer)]
 fn machine_timer_isr() {
-    println!("Machine Timer ISR");
     let peripherals = unsafe { pac::Peripherals::steal() };
     // configure GPIO 40 as an output
     let gpio40 = gpio::get_gpio(peripherals.sys_pinctrl.padcfg().gpio40());
@@ -47,24 +42,9 @@ fn machine_timer_isr() {
         }
     }
 
+    let mtimecmp = 0x0200_4008 as *mut u64;
+    let mtime = 0x0200_bff8 as *const u64;
     unsafe {
-        let mtimecmp = 0x0200_4008 as *mut u64;
-        let mtime = 0x0200_bff8 as *const u64;
         mtimecmp.write_volatile(mtime.read_volatile() + 1_000_000);
-
-        //default_isr_this_has_to_be_wrong::print_pending_interrupt_info();
     }
-
-    //if peripherals.pwm.ctrl().read().en().bit_is_set() {
-    //    unsafe {
-    //        DUTY_CYCLE = (DUTY_CYCLE + 5000) % PERIOD;
-    //        peripherals
-    //            .pwm
-    //            .hrc()
-    //            .modify(|_, w| w.hrc().variant(DUTY_CYCLE));
-    //        println!("Duty Cycle: {DUTY_CYCLE}");
-    //    }
-    //} else {
-    //    println!("PWM Disabled :(");
-    //}
 }

@@ -3,7 +3,6 @@ use jh7110_hal as hal;
 use jh7110_pac::{self as pac, Interrupt};
 
 use crate::default_isr_this_has_to_be_wrong::{enable_interrupt, InterruptPriority};
-use crate::println;
 
 pub fn configure() {
     let p = unsafe { pac::Peripherals::steal() };
@@ -15,7 +14,7 @@ pub fn configure() {
         .rst()
         .software_address_selector()
         .rst3()
-        .modify(|_, w| w.u0_pwm_apb().none());
+        .modify(|_, w| w.u0_pwm_apb().clear_bit());
     //Set the low and high counter values
     p.pwm.lrc().modify(|_, w| w.lrc().variant(5_000_000u32));
     p.pwm.hrc().modify(|_, w| w.hrc().variant(5_000_000u32));
@@ -84,7 +83,4 @@ fn ptc0() {
         current_hrc -= 1;
     }
     p.pwm.hrc().modify(|_, w| w.hrc().variant(current_hrc));
-
-    //    let current_time = p.pwm.cntr().read().bits();
-    //    println!("Current Time: {current_time}");
 }

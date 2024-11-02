@@ -391,7 +391,7 @@ pac::interrupt!(PTC5, default_handler);
 pac::interrupt!(PTC6, default_handler);
 pac::interrupt!(PTC7, default_handler);
 pac::interrupt!(WDOG, default_handler);
-pac::interrupt!(TIMER0, default_handler);
+//pac::interrupt!(TIMER0, default_handler);
 pac::interrupt!(TIMER1, default_handler);
 pac::interrupt!(TIMER2, default_handler);
 pac::interrupt!(TIMER3, default_handler);

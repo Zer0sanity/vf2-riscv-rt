@@ -18,23 +18,32 @@
 //stable.  Id probably have to add extra logic around that to detect that when the signal is
 //detected as stable that it is still at the logic I expect, but that's the just of it.
 
-use core::{u32, usize};
-
-//use jh7110_hal::gpio::Pad;
-use crate::println;
 use crate::{
     array_vec::ArrayVec,
     default_isr_this_has_to_be_wrong::{enable_interrupt, InterruptPriority},
+    log,
 };
+use crate::{println, timer::*};
+use jh7110_hal::gpio::Pad;
 use jh7110_pac::{self as pac, Interrupt};
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum LogicState {
-    ActiveHigh,
-    ActiveLow,
+    Low,
+    High,
+    Unknown,
 }
 
-#[derive(Copy, Clone)]
+impl From<u64> for LogicState {
+    fn from(value: u64) -> Self {
+        match value {
+            0 => LogicState::Low,
+            _ => LogicState::High,
+        }
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
 pub enum InputSignalState {
     Unknown,
     StableLow,
@@ -43,29 +52,32 @@ pub enum InputSignalState {
     StabilizingLow,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Signal {
-    pin_number: u32,
-    logic_state: LogicState,
+    pin_number: Pad,
     state: InputSignalState,
-    rising_edge_callback: fn(),
-    falling_edge_callback: fn(),
+    stabilization_counter: u8,
+    logic_state: LogicState,
+    edge_callback: fn(signal: &mut Signal, logic_state: LogicState),
 }
 
 impl Signal {
     pub fn new(
-        pin_number: u32,
-        logic_state: LogicState,
-        rising_edge_callback: fn(),
-        falling_edge_callback: fn(),
+        pin_number: Pad,
+        edge_callback: fn(signal: &mut Signal, logic_state: LogicState),
     ) -> Self {
         Self {
             pin_number,
-            logic_state,
             state: InputSignalState::Unknown,
-            rising_edge_callback,
-            falling_edge_callback,
+            stabilization_counter: 0,
+            logic_state: LogicState::Unknown,
+            edge_callback,
         }
+    }
+
+    pub fn update_state(&mut self, state: InputSignalState) {
+        self.state = state;
+        self.stabilization_counter = 0;
     }
 }
 
@@ -80,14 +92,9 @@ pub fn configure() {
     // https://docs.rust-embedded.org/embedonomicon/main.html#life-before-main
     unsafe {
         SIGNALS.init();
-        match SIGNALS.try_push(Signal::new(
-            37,
-            LogicState::ActiveLow,
-            pin_rising,
-            pin_falling,
-        )) {
+        match SIGNALS.try_push(Signal::new(Pad::Gpio37, edge_callback)) {
             Err(s) => {
-                println!("Failed insert of signal for pin {}", s.pin_number);
+                println!("Failed insert of signal for pin {:?}", s.pin_number);
             }
             Ok(_) => {}
         }
@@ -200,17 +207,51 @@ pub fn configure() {
     //pinctrl.ioirq().ioirq15()
     //SYS IOMUX CFGSAIF SYSCFG IOIRQ 71 Block1 Sunc register
     //pinctrl.ioirq().ioirq16()
-    //
-    //
+
+    println!("Setting up crg");
+    //Setup timer and timer interrupt
+    let sys_crg = unsafe { &*pac::Syscrg::ptr() };
+    //Enable the timer Advanced Preriphial BUS clock
+    sys_crg.clk_tim().apb().modify(|_, w| w.clk_icg().set_bit());
+    //Enable the timer clock
+    sys_crg
+        .clk_tim()
+        .tim01_0()
+        .modify(|_, w| w.clk_icg().set_bit());
+    //Clear the timer abp reset bit
+    sys_crg
+        .rst()
+        .software_address_selector()
+        .rst3()
+        .modify(|_, w| w.u0_si5_timer_apb().clear_bit());
+    //Clear the timer reset bit
+    sys_crg
+        .rst()
+        .software_address_selector()
+        .rst3()
+        .modify(|_, w| w.u0_si5_timer_0().clear_bit());
+
+    //Setup the timer
+    let t0 = Timer0::new();
+    t0.print_debug_info();
+    //Mask the interrupt
+    t0.set_int_mask(TimerIntMask::Mask);
+    match t0.get_int_clear_busy() {
+        TimerIntClearBusy::Yes => {
+            println!("Timer0 int clear still busy");
+        }
+        TimerIntClearBusy::No => {
+            t0.set_int_status_clear(TimerIntClearStatus::Clear);
+            t0.set_load(0x100000);
+            //t0.reload_counter();
+            t0.set_int_mask(TimerIntMask::Unmask);
+            t0.set_enable(TimerEnable::Enable);
+        }
+    }
 
     //
-    //
-    //
-    //Setup timer interrupt
-    //
-
-    //
-    enable_interrupt(Interrupt::SYS_IOMUX, InterruptPriority::Priority7)
+    enable_interrupt(Interrupt::SYS_IOMUX, InterruptPriority::Priority7);
+    enable_interrupt(Interrupt::TIMER0, InterruptPriority::Priority7);
 }
 
 pac::interrupt!(SYS_IOMUX, signal_change_handler);
@@ -227,31 +268,15 @@ fn signal_change_handler() {
     println!("mis0: {:#10x}, mis1: {:#10x}", mis0, mis1);
     println!("sync0: {:#10x}, sync1: {:#10x}", sync0, sync1);
 
+    let mis: u64 = (mis1 as u64) << 32 | (mis0 as u64);
+    let sync: u64 = (sync1 as u64) << 32 | (sync0 as u64);
+
     //Check if any of these match out signals, read sync, update signal, do call back
     unsafe {
         for s in SIGNALS.iter_mut() {
-            let mut edge_event = false;
-            let mut signle_is_high = false;
-            if s.pin_number < PADS_PER_REGISTER as u32 {
-                let mask = 1 << s.pin_number;
-                edge_event = (mis0 & mask) != 0;
-                signle_is_high = (sync0 & mask) != 0;
-            } else if s.pin_number <= NUMBER_GPIO as u32 {
-                let mask = 1 << (s.pin_number - PADS_PER_REGISTER as u32);
-                edge_event = (mis1 & mask) != 0;
-                signle_is_high = (sync1 & mask) != 0;
-            } else {
-                println!("Invalid signal in SIGNALS {}", s.pin_number);
-            }
-
-            if edge_event == true {
-                if signle_is_high == true {
-                    s.state = InputSignalState::StabilizingHigh;
-                    (s.rising_edge_callback)();
-                } else {
-                    s.state = InputSignalState::StabilizingLow;
-                    (s.falling_edge_callback)();
-                }
+            let pin_mask = 1 << (s.pin_number as u64);
+            if mis & pin_mask != 0 {
+                (s.edge_callback)(s, LogicState::from(sync & pin_mask));
             }
         }
     }
@@ -278,12 +303,83 @@ fn signal_change_handler() {
         .modify(|r, w| w.ic1().variant(r.ic1().bits() | mis1));
 }
 
-fn pin_rising() {
-    println!("PIN RISING");
+pac::interrupt!(TIMER0, timer_interrupt_handler);
+#[no_mangle]
+fn timer_interrupt_handler() {
+    //Get the timer
+    let t0 = Timer0::new();
+    //Do the thing
+    //Check if any of these match out signals, read sync, update signal, do call back
+    unsafe {
+        for s in SIGNALS.iter_mut() {
+            match s.state {
+                InputSignalState::StabilizingLow => {
+                    s.stabilization_counter += 1;
+                    if s.stabilization_counter == 5 {
+                        //read pin to verify we are insync
+                        println!("Signal: {:?} Stable Low", s);
+                        s.update_state(InputSignalState::StableLow);
+                    }
+                }
+                InputSignalState::StabilizingHigh => {
+                    s.stabilization_counter += 1;
+                    if s.stabilization_counter == 5 {
+                        //Read Pin and verify we are in sync
+                        s.update_state(InputSignalState::StableHigh);
+                    }
+                }
+                InputSignalState::Unknown => {
+                    //Read pin state and set to stabelizing that direction
+                    println!("Unknown State choosing high");
+                    s.update_state(InputSignalState::StabilizingHigh);
+                }
+                _ => { /*Not wure what to do yet*/ }
+            }
+        }
+    }
+    //Clear the interrupt status
+    t0.set_int_status_clear(TimerIntClearStatus::Clear);
 }
 
-fn pin_falling() {
-    println!("PIN FALLING");
+fn edge_callback(signal: &mut Signal, logic_state: LogicState) {
+    println!(
+        "Edge Callback Signal: {:?}, State: {:?}",
+        signal, logic_state
+    );
+
+    match signal.state {
+        InputSignalState::StableLow => {
+            signal.update_state(InputSignalState::StabilizingHigh);
+            if logic_state == LogicState::Low {
+                println!("***UNEXPECTED LOGIC LOW***");
+            }
+        }
+        InputSignalState::StableHigh => {
+            signal.update_state(InputSignalState::StabilizingLow);
+            if logic_state == LogicState::High {
+                println!("***UNEXPECTED LOGIC HIGH***");
+            }
+        }
+        InputSignalState::StabilizingLow => {
+            signal.stabilization_counter = 0;
+        }
+        InputSignalState::StabilizingHigh => {
+            signal.stabilization_counter = 0;
+        }
+        InputSignalState::Unknown => {
+            match logic_state {
+                LogicState::Low => {
+                    signal.update_state(InputSignalState::StabilizingLow);
+                }
+                LogicState::High => {
+                    signal.update_state(InputSignalState::StabilizingHigh);
+                }
+                LogicState::Unknown => {
+                    println!("Unknown Logic State WTF!?");
+                }
+            };
+        }
+    }
 }
 
 fn run_test() {
@@ -291,15 +387,11 @@ fn run_test() {
     for i in 1..11 {
         println!("Signal Created");
         let s = Signal {
-            pin_number: i,
-            logic_state: LogicState::ActiveLow,
+            pin_number: Pad::from(i),
             state: InputSignalState::Unknown,
-            rising_edge_callback: || {
-                println!("Rising");
-            },
-            falling_edge_callback: || {
-                println!("Falling");
-            },
+            stabilization_counter: 0,
+            logic_state: LogicState::Unknown,
+            edge_callback,
         };
 
         println!("Before Push");
@@ -314,7 +406,7 @@ fn run_test() {
 
     unsafe {
         for s in SIGNALS.iter() {
-            println!("Hi: {}", s.pin_number);
+            println!("Hi: {:?}", s.pin_number);
         }
     }
 
@@ -323,7 +415,7 @@ fn run_test() {
     println!("Before Mut Interator");
     unsafe {
         for s in SIGNALS.iter_mut() {
-            s.pin_number += 10;
+            s.pin_number = Pad::from(s.pin_number as u32 + 10);
         }
     }
 
@@ -333,7 +425,7 @@ fn run_test() {
 
     unsafe {
         for s in SIGNALS.iter() {
-            println!("Hi: {}", s.pin_number);
+            println!("Hi: {:?}", s.pin_number);
         }
     }
 

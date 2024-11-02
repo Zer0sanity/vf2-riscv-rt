@@ -10,6 +10,7 @@ mod default_isr_this_has_to_be_wrong;
 mod init;
 mod input_signal;
 mod log;
+mod timer;
 
 use riscv_rt::{entry, pre_init};
 
