@@ -34,11 +34,11 @@ pub enum LogicState {
     Unknown,
 }
 
-impl From<u64> for LogicState {
-    fn from(value: u64) -> Self {
-        match value {
-            0 => LogicState::Low,
-            _ => LogicState::High,
+impl From<bool> for LogicState {
+    fn from(is_high: bool) -> Self {
+        match is_high {
+            false => LogicState::Low,
+            true => LogicState::High,
         }
     }
 }
@@ -58,14 +58,11 @@ pub struct Signal {
     state: InputSignalState,
     stabilization_counter: u8,
     logic_state: LogicState,
-    edge_callback: fn(signal: &mut Signal, logic_state: LogicState),
+    edge_callback: fn(logic_state: LogicState),
 }
 
 impl Signal {
-    pub fn new(
-        pin_number: Pad,
-        edge_callback: fn(signal: &mut Signal, logic_state: LogicState),
-    ) -> Self {
+    pub fn new(pin_number: Pad, edge_callback: fn(logic_state: LogicState)) -> Self {
         Self {
             pin_number,
             state: InputSignalState::Unknown,
@@ -75,9 +72,100 @@ impl Signal {
         }
     }
 
-    pub fn update_state(&mut self, state: InputSignalState) {
-        self.state = state;
-        self.stabilization_counter = 0;
+    pub fn process_edge(&mut self, state: LogicState) {
+        match self.state {
+            InputSignalState::StableLow => {
+                self.state = InputSignalState::StabilizingHigh;
+                self.stabilization_counter = 0;
+                (self.edge_callback)(LogicState::High);
+                if state == LogicState::Low {
+                    println!("***UNEXPECTED LOGIC LOW***");
+                }
+            }
+            InputSignalState::StableHigh => {
+                self.state = InputSignalState::StabilizingLow;
+                self.stabilization_counter = 0;
+                (self.edge_callback)(LogicState::Low);
+                if state == LogicState::High {
+                    println!("***UNEXPECTED LOGIC HIGH***");
+                }
+            }
+            InputSignalState::StabilizingLow => {
+                self.stabilization_counter = 0;
+                println!("dbl, ls: {:?}", state);
+            }
+            InputSignalState::StabilizingHigh => {
+                self.stabilization_counter = 0;
+                println!("dbh, ls: {:?}", state);
+            }
+            InputSignalState::Unknown => {
+                match state {
+                    LogicState::Low => {
+                        self.state = InputSignalState::StabilizingLow;
+                        self.stabilization_counter = 0;
+                    }
+                    LogicState::High => {
+                        self.state = InputSignalState::StabilizingLow;
+                        self.stabilization_counter = 0;
+                    }
+                    LogicState::Unknown => {
+                        println!("Unknown Logic State WTF!?");
+                    }
+                };
+            }
+        }
+    }
+
+    pub fn process_debounce_tick(&mut self, logic_state: LogicState) {
+        match self.state {
+            InputSignalState::StabilizingLow => {
+                self.stabilization_counter += 1;
+                if self.stabilization_counter == 5 {
+                    if logic_state == LogicState::Low {
+                        self.state = InputSignalState::StableLow;
+                        self.logic_state = logic_state;
+                        self.stabilization_counter = 0;
+                    } else {
+                        println!("Stabelizing Low, But Signal High.");
+                        self.state = InputSignalState::StabilizingHigh;
+                        self.stabilization_counter = 0;
+                    }
+                }
+            }
+            InputSignalState::StabilizingHigh => {
+                self.stabilization_counter += 1;
+                if self.stabilization_counter == 5 {
+                    if logic_state == LogicState::High {
+                        self.state = InputSignalState::StableHigh;
+                        self.logic_state = logic_state;
+                        self.stabilization_counter = 0;
+                    } else {
+                        println!("Stabelizing High, But Signal Low.");
+                        self.state = InputSignalState::StabilizingLow;
+                        self.stabilization_counter = 0;
+                    }
+                }
+            }
+            InputSignalState::Unknown => {
+                //Set to stabelizing the direction of the pin
+                match logic_state {
+                    LogicState::Low => {
+                        self.state = InputSignalState::StabilizingLow;
+                        self.stabilization_counter = 0;
+                    }
+                    LogicState::High => {
+                        self.state = InputSignalState::StabilizingHigh;
+                        self.stabilization_counter = 0;
+                    }
+                    LogicState::Unknown => {
+                        println!("wtf");
+                        self.state = InputSignalState::StabilizingLow;
+                        self.stabilization_counter = 0;
+                    }
+                }
+            }
+            _ => { /*Not wure what to do yet*/ }
+        }
     }
 }
 
@@ -99,9 +187,6 @@ pub fn configure() {
             Ok(_) => {}
         }
     }
-
-    //run_test();
-    println!("Signal {}", core::mem::size_of::<Signal>());
 
     //Get GPIO
     let pinctrl = unsafe { &*pac::SysPinctrl::ptr() };
@@ -125,7 +210,8 @@ pub fn configure() {
             .slew()
             .clear_bit() //set slew rate to slow (dont care)
             .smt()
-            .clear_bit() //disable the schmitt trigger for now (May want to enable later, will help
+            .set_bit()
+            //.clear_bit() //disable the schmitt trigger for now (May want to enable later, will help
             //with switch bouncing)
             .pos()
             .clear_bit() //disable active pull down capability
@@ -233,7 +319,6 @@ pub fn configure() {
 
     //Setup the timer
     let t0 = Timer0::new();
-    t0.print_debug_info();
     //Mask the interrupt
     t0.set_int_mask(TimerIntMask::Mask);
     match t0.get_int_clear_busy() {
@@ -242,7 +327,9 @@ pub fn configure() {
         }
         TimerIntClearBusy::No => {
             t0.set_int_status_clear(TimerIntClearStatus::Clear);
-            t0.set_load(0x100000);
+            //So the apb is at 24MHz and I want this to fire every 10ms.
+            //24000000*.01=240000
+            t0.set_load(240000);
             //t0.reload_counter();
             t0.set_int_mask(TimerIntMask::Unmask);
             t0.set_enable(TimerEnable::Enable);
@@ -257,7 +344,6 @@ pub fn configure() {
 pac::interrupt!(SYS_IOMUX, signal_change_handler);
 #[no_mangle]
 fn signal_change_handler() {
-    println!("GPIO Signal ISR");
     //Read Block0 MIS
     //Read Block1 MIS
     let pinctrl = unsafe { &*pac::SysPinctrl::ptr() };
@@ -265,21 +351,6 @@ fn signal_change_handler() {
     let mis1 = pinctrl.ioirq().ioirq14().read().bits();
     let sync0 = pinctrl.ioirq().ioirq15().read().bits();
     let sync1 = pinctrl.ioirq().ioirq16().read().bits();
-    println!("mis0: {:#10x}, mis1: {:#10x}", mis0, mis1);
-    println!("sync0: {:#10x}, sync1: {:#10x}", sync0, sync1);
-
-    let mis: u64 = (mis1 as u64) << 32 | (mis0 as u64);
-    let sync: u64 = (sync1 as u64) << 32 | (sync0 as u64);
-
-    //Check if any of these match out signals, read sync, update signal, do call back
-    unsafe {
-        for s in SIGNALS.iter_mut() {
-            let pin_mask = 1 << (s.pin_number as u64);
-            if mis & pin_mask != 0 {
-                (s.edge_callback)(s, LogicState::from(sync & pin_mask));
-            }
-        }
-    }
 
     //Note from TRM:  You can also write 0 and 1 sequentially to clear edge IRQ.
     //Writing just 1 didnt clear and writing 0 just disabled
@@ -301,85 +372,50 @@ fn signal_change_handler() {
         .ioirq()
         .ioirq4()
         .modify(|r, w| w.ic1().variant(r.ic1().bits() | mis1));
-}
 
-pac::interrupt!(TIMER0, timer_interrupt_handler);
-#[no_mangle]
-fn timer_interrupt_handler() {
-    //Get the timer
-    let t0 = Timer0::new();
-    //Do the thing
+    let mis: u64 = (mis1 as u64) << 32 | (mis0 as u64);
+    let sync: u64 = (sync1 as u64) << 32 | (sync0 as u64);
+
+    //println!("MIS{:#18x}", mis);
     //Check if any of these match out signals, read sync, update signal, do call back
     unsafe {
         for s in SIGNALS.iter_mut() {
-            match s.state {
-                InputSignalState::StabilizingLow => {
-                    s.stabilization_counter += 1;
-                    if s.stabilization_counter == 5 {
-                        //read pin to verify we are insync
-                        println!("Signal: {:?} Stable Low", s);
-                        s.update_state(InputSignalState::StableLow);
-                    }
-                }
-                InputSignalState::StabilizingHigh => {
-                    s.stabilization_counter += 1;
-                    if s.stabilization_counter == 5 {
-                        //Read Pin and verify we are in sync
-                        s.update_state(InputSignalState::StableHigh);
-                    }
-                }
-                InputSignalState::Unknown => {
-                    //Read pin state and set to stabelizing that direction
-                    println!("Unknown State choosing high");
-                    s.update_state(InputSignalState::StabilizingHigh);
-                }
-                _ => { /*Not wure what to do yet*/ }
+            let pin_mask = 1 << (s.pin_number as u64);
+            if mis & pin_mask != 0 {
+                let is_high = (sync & pin_mask) != 0;
+                //println!("E{:#18x}:{:#18x}", sync, pin_mask);
+                s.process_edge(LogicState::from(is_high));
             }
         }
     }
+}
+
+pac::interrupt!(TIMER0, input_signal_timer_interrupt_handler);
+#[no_mangle]
+fn input_signal_timer_interrupt_handler() {
+    let pinctrl = unsafe { &*pac::SysPinctrl::ptr() };
+    let sync0 = pinctrl.ioirq().ioirq15().read().bits();
+    let sync1 = pinctrl.ioirq().ioirq16().read().bits();
+    //Do the thing
+    let sync: u64 = (sync1 as u64) << 32 | (sync0 as u64);
+
+    //Check if any of these match out signals, read sync, update signal, do call back
+    unsafe {
+        for s in SIGNALS.iter_mut() {
+            let pin_mask = 1 << (s.pin_number as u64);
+            let is_high = (sync & pin_mask) != 0;
+            //println!("T{:#18x}:{:#18x}", sync, pin_mask);
+            s.process_debounce_tick(LogicState::from(is_high));
+        }
+    }
+
     //Clear the interrupt status
+    let t0 = Timer0::new();
     t0.set_int_status_clear(TimerIntClearStatus::Clear);
 }
 
-fn edge_callback(signal: &mut Signal, logic_state: LogicState) {
-    println!(
-        "Edge Callback Signal: {:?}, State: {:?}",
-        signal, logic_state
-    );
-
-    match signal.state {
-        InputSignalState::StableLow => {
-            signal.update_state(InputSignalState::StabilizingHigh);
-            if logic_state == LogicState::Low {
-                println!("***UNEXPECTED LOGIC LOW***");
-            }
-        }
-        InputSignalState::StableHigh => {
-            signal.update_state(InputSignalState::StabilizingLow);
-            if logic_state == LogicState::High {
-                println!("***UNEXPECTED LOGIC HIGH***");
-            }
-        }
-        InputSignalState::StabilizingLow => {
-            signal.stabilization_counter = 0;
-        }
-        InputSignalState::StabilizingHigh => {
-            signal.stabilization_counter = 0;
-        }
-        InputSignalState::Unknown => {
-            match logic_state {
-                LogicState::Low => {
-                    signal.update_state(InputSignalState::StabilizingLow);
-                }
-                LogicState::High => {
-                    signal.update_state(InputSignalState::StabilizingHigh);
-                }
-                LogicState::Unknown => {
-                    println!("Unknown Logic State WTF!?");
-                }
-            };
-        }
-    }
+fn edge_callback(logic_state: LogicState) {
+    println!("Switch Event {:?}", logic_state);
 }
 
 fn run_test() {

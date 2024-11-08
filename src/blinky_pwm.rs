@@ -2,7 +2,10 @@ use hal::gpio::{GpenFunction, GpoFunction};
 use jh7110_hal as hal;
 use jh7110_pac::{self as pac, Interrupt};
 
-use crate::default_isr_this_has_to_be_wrong::{enable_interrupt, InterruptPriority};
+use crate::{
+    default_isr_this_has_to_be_wrong::{enable_interrupt, InterruptPriority},
+    println,
+};
 
 pub fn configure() {
     let p = unsafe { pac::Peripherals::steal() };
@@ -16,10 +19,10 @@ pub fn configure() {
         .rst3()
         .modify(|_, w| w.u0_pwm_apb().clear_bit());
     //Set the low and high counter values
-    p.pwm.lrc().modify(|_, w| w.lrc().variant(5_000_000u32));
-    p.pwm.hrc().modify(|_, w| w.hrc().variant(5_000_000u32));
+    p.pwm0.lrc().modify(|_, w| w.lrc().variant(5_000_000u32));
+    p.pwm0.hrc().modify(|_, w| w.hrc().variant(5_000_000u32));
     //Setup the control register
-    p.pwm.ctrl().modify(|_, w| {
+    p.pwm0.ctrl().modify(|_, w| {
         w.en()
             .set_bit() //enable rptc counter incrementation
             .eclk()
@@ -74,13 +77,12 @@ pac::interrupt!(PTC0, ptc0);
 #[no_mangle]
 fn ptc0() {
     let p = unsafe { pac::Peripherals::steal() };
-
     //Set the low and high counter values
-    let mut current_hrc = p.pwm.hrc().read().bits();
+    let mut current_hrc = p.pwm0.hrc().read().bits();
     if current_hrc == 0 {
         current_hrc = 5_000_000u32;
     } else {
         current_hrc -= 1;
     }
-    p.pwm.hrc().modify(|_, w| w.hrc().variant(current_hrc));
+    p.pwm0.hrc().modify(|_, w| w.hrc().variant(current_hrc));
 }

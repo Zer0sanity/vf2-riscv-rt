@@ -383,7 +383,7 @@ pac::interrupt!(SPI4, default_handler);
 pac::interrupt!(SPI5, default_handler);
 pac::interrupt!(SPI6, default_handler);
 //pac::interrupt!(PTC0, default_handler);
-pac::interrupt!(PTC1, default_handler);
+//pac::interrupt!(PTC1, default_handler);
 pac::interrupt!(PTC2, default_handler);
 pac::interrupt!(PTC3, default_handler);
 pac::interrupt!(PTC4, default_handler);

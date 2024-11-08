@@ -10,6 +10,7 @@ mod default_isr_this_has_to_be_wrong;
 mod init;
 mod input_signal;
 mod log;
+mod stepper_motor;
 mod timer;
 
 use riscv_rt::{entry, pre_init};
@@ -114,11 +115,12 @@ fn main() -> ! {
             blinky::configure();
             blinky_pwm::configure();
             input_signal::configure();
+            stepper_motor::init();
             println!("back in main about to spin after setting up blinky");
             init::print_uart_isr_reg();
-            default_isr_this_has_to_be_wrong::print_interrupt_enable();
-            default_isr_this_has_to_be_wrong::print_pending_interrupt_info();
-            default_isr_this_has_to_be_wrong::print_priority_interrupt_info();
+            //default_isr_this_has_to_be_wrong::print_interrupt_enable();
+            //default_isr_this_has_to_be_wrong::print_pending_interrupt_info();
+            //default_isr_this_has_to_be_wrong::print_priority_interrupt_info();
             unsafe {
                 println!("Enabeling machine timer interrupt");
                 riscv::register::mie::set_mtimer();

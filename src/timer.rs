@@ -1,4 +1,4 @@
-#![allow(unused)]
+#[allow(unused)]
 use core::{marker::PhantomData, ptr};
 
 use crate::println;
@@ -285,9 +285,17 @@ impl Timer for Timer0 {
 }
 
 /// Struct to access Timer1
-struct Timer1 {
+pub struct Timer1 {
     /// I dont know why I should put this here
     _marker: PhantomData<*const ()>,
+}
+
+impl Timer1 {
+    pub fn new() -> Self {
+        Self {
+            _marker: PhantomData,
+        }
+    }
 }
 
 impl Timer for Timer1 {
@@ -295,7 +303,7 @@ impl Timer for Timer1 {
 }
 
 /// Struct to access Timer2
-struct Timer2 {
+pub struct Timer2 {
     /// I dont know why I should put this here
     _marker: PhantomData<*const ()>,
 }
@@ -305,7 +313,7 @@ impl Timer for Timer2 {
 }
 
 /// Struct to access Timer3
-struct Timer3 {
+pub struct Timer3 {
     /// I dont know why I should put this here
     _marker: PhantomData<*const ()>,
 }
