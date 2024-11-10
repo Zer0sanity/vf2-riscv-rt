@@ -19,8 +19,8 @@ pub fn configure() {
         .rst3()
         .modify(|_, w| w.u0_pwm_apb().clear_bit());
     //Set the low and high counter values
-    p.pwm0.lrc().modify(|_, w| w.lrc().variant(5_000_000u32));
-    p.pwm0.hrc().modify(|_, w| w.hrc().variant(5_000_000u32));
+    p.pwm0.lrc().modify(|_, w| w.lrc().variant(50_000u32));
+    p.pwm0.hrc().modify(|_, w| w.hrc().variant(50_001u32));
     //Setup the control register
     p.pwm0.ctrl().modify(|_, w| {
         w.en()
@@ -78,11 +78,12 @@ pac::interrupt!(PTC0, ptc0);
 fn ptc0() {
     let p = unsafe { pac::Peripherals::steal() };
     //Set the low and high counter values
-    let mut current_hrc = p.pwm0.hrc().read().bits();
-    if current_hrc == 0 {
-        current_hrc = 5_000_000u32;
+    let mut current_lrc = p.pwm0.lrc().read().bits();
+    if current_lrc == 100_000u32 {
+        current_lrc = 50_001u32;
     } else {
-        current_hrc -= 1;
+        current_lrc += 1;
     }
-    p.pwm0.hrc().modify(|_, w| w.hrc().variant(current_hrc));
+    p.pwm0.lrc().modify(|_, w| w.lrc().variant(current_lrc));
+    p.pwm0.ctrl().modify(|_, w| w.int().clear_bit());
 }

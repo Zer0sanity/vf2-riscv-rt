@@ -21,10 +21,8 @@ use jh7110_pac::Interrupt;
 use crate::{
     default_isr_this_has_to_be_wrong::{enable_interrupt, InterruptPriority},
     println,
-    timer::*,
 };
 
-static mut PIN_IS_HIGH: bool = false;
 pub fn init() {
     let p = unsafe { pac::Peripherals::steal() };
     init_gpio(
@@ -51,7 +49,7 @@ fn init_gpio<
     ms2: &GpioMs2,
     uart: &GpioUart,
     //clk: &GPIO,
-    step: &GpioStep,
+    _step: &GpioStep,
     dir: &GpioDir,
 ) {
     let mut ms1 = gpio::get_gpio(ms1).into_enabled_output();
@@ -72,49 +70,6 @@ fn init_gpio<
     let mut dir = gpio::get_gpio(dir).into_enabled_output();
     let _ = dir.set_low();
 
-    // println!("Setting up crg step");
-    // //Setup timer and timer interrupt
-    // let sys_crg = unsafe { &*pac::Syscrg::ptr() };
-    // //Enable the timer Advanced Preriphial BUS clock
-    // sys_crg.clk_tim().apb().modify(|_, w| w.clk_icg().set_bit());
-    // //Enable the timer clock
-    // sys_crg
-    //     .clk_tim()
-    //     .tim01_1()
-    //     .modify(|_, w| w.clk_icg().set_bit());
-    // //Clear the timer abp reset bit
-    // sys_crg
-    //     .rst()
-    //     .software_address_selector()
-    //     .rst3()
-    //     .modify(|_, w| w.u0_si5_timer_apb().clear_bit());
-    // //Clear the timer reset bit
-    // sys_crg
-    //     .rst()
-    //     .software_address_selector()
-    //     .rst3()
-    //     .modify(|_, w| w.u0_si5_timer_1().clear_bit());
-
-    // //Setup the timer
-    // let t1 = Timer1::new();
-    // //Mask the interrupt
-    // t1.set_int_mask(TimerIntMask::Mask);
-    // match t1.get_int_clear_busy() {
-    //     TimerIntClearBusy::Yes => {
-    //         println!("Timer1 int clear still busy");
-    //     }
-    //     TimerIntClearBusy::No => {
-    //         t1.set_int_status_clear(TimerIntClearStatus::Clear);
-    //         //So the apb is at 24MHz and I want this to fire every 10ms.
-    //         //24000000*.01=240000
-    //         t1.set_load(24000);
-    //         //t0.reload_counter();
-    //         t1.set_int_mask(TimerIntMask::Unmask);
-    //         t1.set_enable(TimerEnable::Enable);
-    //     }
-    // }
-    //enable_interrupt(Interrupt::TIMER1, InterruptPriority::Priority7);
-
     let p = unsafe { pac::Peripherals::steal() };
     //Enable the pwm apb clock
     p.syscrg.clk_pwm_apb().modify(|_, w| w.clk_icg().set_bit());
@@ -125,8 +80,8 @@ fn init_gpio<
         .rst3()
         .modify(|_, w| w.u0_pwm_apb().clear_bit());
     //Set the low and high counter values
-    p.pwm1.lrc().modify(|_, w| w.lrc().variant(5_000_000u32));
-    p.pwm1.hrc().modify(|_, w| w.hrc().variant(5_000_000u32));
+    p.pwm1.lrc().modify(|_, w| w.lrc().variant(2_000_000u32));
+    p.pwm1.hrc().modify(|_, w| w.hrc().variant(1_000_000u32));
     //Setup the control register
     p.pwm1.ctrl().modify(|_, w| {
         w.en()
@@ -176,45 +131,112 @@ fn init_gpio<
             .clear_bit() //disable active pull down capability
     });
 
+    unsafe {
+        STEP_COUNTER = 0;
+        MOVE_COMMAND.num_steps = 100;
+        MOVE_COMMAND.direction = MotorDirection::Forward;
+        let d = p.sys_pinctrl.padcfg().gpio39();
+        let d = gpio::get_gpio(d);
+        let mut d = d.into_enabled_output();
+        d.set_pin(bool::from(MOVE_COMMAND.direction));
+    }
+
     enable_interrupt(Interrupt::PTC1, InterruptPriority::Priority7)
 
     //
 }
 
+#[derive(Clone, Copy, Debug)]
+enum MotorDirection {
+    Forward,
+    Retrograde,
+}
+
+impl From<MotorDirection> for bool {
+    fn from(dir: MotorDirection) -> bool {
+        match dir {
+            MotorDirection::Forward => true,
+            MotorDirection::Retrograde => false,
+        }
+    }
+}
+
+struct StepMove {
+    num_steps: usize,
+    direction: MotorDirection,
+}
+
+static mut MOVE_COMMAND: StepMove = StepMove {
+    num_steps: 100,
+    direction: MotorDirection::Forward,
+};
+
+static mut STEP_COUNTER: usize = 0;
+
 pac::interrupt!(PTC1, step_pwm_interrupt_handler);
 #[no_mangle]
 fn step_pwm_interrupt_handler() {
-    let p = unsafe { pac::Peripherals::steal() };
-    //Set the low and high counter values
-    let mut current_hrc = p.pwm1.hrc().read().bits();
-    if current_hrc == 0 {
-        current_hrc = 5_000_000u32;
-    } else {
-        current_hrc -= 1;
+    let p = unsafe { pac::Pwm1::steal() };
+    //Print clock values to see interrupt
+    let cnt = p.cntr().read().bits();
+    let hrc = p.hrc().read().bits();
+    let lrc = p.lrc().read().bits();
+    let _ctrl = p.ctrl().read().bits();
+    //println!(
+    //    "cnt: {}, hrc: {}, lrc: {}, ctrl: {:#10X}",
+    //    cnt, hrc, lrc, ctrl
+    //);
+
+    //See if the interrupt is for the second half of the step signal
+    //Try to find a better way to detect this.  We seem to get an interrupt
+    //after the match when in free running mode or a match to lrc in single mode.
+    //So, for example in free running mode after the lrc match the counter would
+    //roll over
+    //Free-Run mode
+    //HRC match -> cnt: 12000039, hrc: 12000000, lrc: 24000000, ctrl:       0x69
+    //LRC match -> cnt: 22, hrc: 12000000, lrc: 24000000, ctrl:       0x69
+    //Single mode
+    //HRC match -> cnt: 12000058, hrc: 12000000, lrc: 24000000, ctrl:       0x79
+    //LRC match -> cnt: 24000000, hrc: 12000000, lrc: 24000000, ctrl:       0x79
+    if cnt < hrc || cnt == lrc {
+        unsafe {
+            STEP_COUNTER += 1;
+            match MOVE_COMMAND.num_steps {
+                0 => {
+                    MOVE_COMMAND.num_steps = 100;
+                    MOVE_COMMAND.direction = match MOVE_COMMAND.direction {
+                        MotorDirection::Forward => MotorDirection::Retrograde,
+                        MotorDirection::Retrograde => MotorDirection::Forward,
+                    };
+                    //Clear the counter and put it in reset.  Clearing counter is
+                    //probasbly not needed.
+                    p.cntr().modify(|_, w| w.cntr().variant(0));
+                    p.ctrl().modify(|_, w| w.cntrrst().set_bit());
+                    println!("End of move. {}", STEP_COUNTER);
+                    //Setup to revirse direction
+                    let d = pac::SysPinctrl::steal();
+                    let d = d.padcfg().gpio39();
+                    let d = gpio::get_gpio(d);
+                    let mut d = d.into_enabled_output();
+                    d.set_pin(bool::from(MOVE_COMMAND.direction));
+                    println!("Direction: {:?}", MOVE_COMMAND.direction);
+                    p.ctrl()
+                        .modify(|_, w| w.single().clear_bit().cntrrst().clear_bit())
+                }
+                1 => {
+                    //This is the last period of the move command so enable one shot
+                    p.ctrl().modify(|_, w| w.single().set_bit());
+                    MOVE_COMMAND.num_steps -= 1;
+                    println!("Last Step {}", STEP_COUNTER);
+                }
+                _ => {
+                    //Decrement the number of steps
+                    MOVE_COMMAND.num_steps -= 1;
+                    println!("Stepping {}", STEP_COUNTER);
+                }
+            }
+        }
     }
-    p.pwm1.hrc().modify(|_, w| w.hrc().variant(current_hrc));
+    //Clear the interrupt
+    p.ctrl().modify(|_, w| w.int().clear_bit());
 }
-//pac::interrupt!(TIMER1, step_timer_interrupt_handler);
-//#[no_mangle]
-//fn step_timer_interrupt_handler() {
-//    let pinctrl = unsafe { &*pac::SysPinctrl::ptr() };
-//    let gpio59 = gpio::get_gpio(pinctrl.padcfg().gpio59());
-//    let mut gpio59_out = gpio59.into_enabled_output();
-//
-//    unsafe {
-//        match PIN_IS_HIGH {
-//            false => {
-//                let _ = gpio59_out.set_high();
-//                PIN_IS_HIGH = true;
-//            }
-//            true => {
-//                let _ = gpio59_out.set_low();
-//                PIN_IS_HIGH = false;
-//            }
-//        }
-//    }
-//
-//    //Clear the interrupt status
-//    let t1 = Timer1::new();
-//    t1.set_int_status_clear(TimerIntClearStatus::Clear);
-//}
